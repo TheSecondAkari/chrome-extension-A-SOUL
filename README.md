@@ -28,3 +28,11 @@
 
 
 如果大家想共建的话，欢迎。 按默认的共建流程就行
+
+
+# 感谢
+https://github.com/Xmader/bilitwin （视频下载功能，部分代码参考该项目）
+https://ffmpegwasm.netlify.app/#demo （视频编码功能）
+
+# 维护迭代
+    待定
