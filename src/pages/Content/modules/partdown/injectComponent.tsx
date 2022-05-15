@@ -167,6 +167,8 @@ const InjectComponent = (props: {
           await encodeVideoFlv(targetFile);
         }
         setDownloading(false);
+        setProcess(0);
+        setEncodeProcess(0);
         setVisible(false);
       }
     } catch (e) {
@@ -264,13 +266,14 @@ const InjectComponent = (props: {
   }, []);
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       {fileInfo?.keyframes?.filepositions?.data?.length ? (
         <Popconfirm
           position="tr"
           style={{ width: 'fit-content', maxWidth: 'unset' }}
           getPopupContainer={(node) => node.parentElement as HTMLElement}
           popupVisible={visible}
+          triggerProps={{ unmountOnExit: false }}
           okButtonProps={{
             loading: downloading,
             disabled:
@@ -383,16 +386,25 @@ const InjectComponent = (props: {
           onOk={() => {
             const [b, e] = timeRange;
             if (b >= 0 && e >= 0) downloadPart(b / 1000, e / 1000);
+            setVisible(false);
           }}
           onCancel={() => {
             setVisible(false);
           }}
         >
+          {downloading ? (
+            <Progress
+              style={{ position: 'absolute', left: -16, top: -16 }}
+              type="circle"
+              percent={encoding ? encodeProcess : process}
+              status={encoding ? 'success' : 'normal'}
+            />
+          ) : null}
+
           <Button
             onClick={() => {
               setVisible(!visible);
             }}
-            disabled={downloading}
             shape="circle"
             type="primary"
             icon={<IconDownload />}
