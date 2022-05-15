@@ -1,0 +1,18 @@
+#handle-video-download {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 1000;
+}
+
+.demo-trigger-popup {
+  box-shadow: 0 0 4px 4px gray;
+}
+
+.demo-trigger-icon-click {
+  cursor: pointer;
+}
+
+.demo-trigger-icon-click:hover {
+  color: blue;
+}

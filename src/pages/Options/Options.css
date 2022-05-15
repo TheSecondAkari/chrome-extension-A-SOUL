@@ -1,0 +1,9 @@
+.OptionsContainer {
+  padding: 24px 0;
+  width: 100%;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

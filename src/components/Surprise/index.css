@@ -1,0 +1,38 @@
+#extend-asoul-caidan {
+  position      : fixed;
+  width         : 100%;
+  height        : 100%;
+  left          : 0;
+  top           : 0;
+  z-index       : 5;
+  pointer-events: none;
+}
+
+.xue {
+  pointer-events: auto;
+  position      : absolute;
+  display       : inline-block;
+  /* opacity    : .7; */
+  outline       : none;
+  border        : none;
+  animation     : xuehua 5s infinite linear;
+  height        : auto;
+}
+
+.xue:hover {
+  cursor              : pointer;
+  animation-play-state: paused;
+  opacity             : 1;
+}
+
+@keyframes xuehua {
+  from {
+    opacity  : 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  to {
+    opacity  : 0.2;
+    transform: translate(0, 1000px) rotateZ(720deg) rotateY(720deg) scale(1.5);
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "A-SOUL-Tips",
+  "description": "chrome插件--asoul 互动",
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon-34.png"
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "management",
+    "activeTab",
+    "tabs",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "<all_urls>"
+      ],
+      "js": [
+        "contentScript.bundle.js"
+      ],
+      "css": [
+        "content.styles.css"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "http://www.bilibili.com/video/*",
+        "https://www.bilibili.com/video/*"
+      ],
+      "js": [
+        "public/vendor/ffmpeg.min.js",
+        "public/vendor/ffmpeg-core.js",
+        "contentScript2.bundle.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content.styles.css",
+        "icon-128.png",
+        "icon-34.png",
+        "public/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
