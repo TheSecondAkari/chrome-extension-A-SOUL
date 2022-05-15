@@ -42,7 +42,7 @@ const ConfigForm = (props: { type: 'popup' | 'options' }) => {
           result.enableTips !== undefined ? result.enableTips : true
         );
         setEnableDownload(
-          result.enableDownload !== undefined ? result.enableDownload : false
+          result.enableDownload !== undefined ? result.enableDownload : true
         );
         form.setFieldsValue({
           ...initiConfig,

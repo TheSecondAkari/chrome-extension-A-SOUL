@@ -5,31 +5,21 @@ import {
   Message,
   Popconfirm,
   Progress,
-  Slider,
-  TimePicker,
+  Select,
   Tooltip,
-  Trigger,
 } from '@arco-design/web-react';
-import {
-  IconDownload,
-  IconEdit,
-  IconQuestionCircle,
-} from '@arco-design/web-react/icon';
+import { IconDownload, IconQuestionCircle } from '@arco-design/web-react/icon';
 import { useEffect, useState } from 'react';
 import DetailedFetchBlob from './utils/detailed-fetch-blob';
 import FLVMetaData from './utils/flvparser/flv-metadata';
 import TwentyFourDataView from './utils/twenty-four-dataview';
 import FLV from './utils/flvparser/flv';
-import FLVTag from './utils/flvparser/flv-tag';
-import FLVTags from './utils/flvparser/flv-tags';
-import { downFileToLocal } from './utils/downloadBlob';
+// import FLVTag from './utils/flvparser/flv-tag';
+// import FLVTags from './utils/flvparser/flv-tags';
+import { downFileToLocal, formatTime } from './utils/common';
 import '@arco-design/web-react/dist/css/arco.css';
 
-const fill0 = (str: string | number) => {
-  const temp = `${str}`;
-  return temp.length === 1 ? '0' + temp : temp;
-};
-
+// ! 不再手动处理flv的Tag信息，采用ffmpeg去处理
 // duration 时长，毫秒
 const InjectComponent = (props: {
   streamUrl: string;
@@ -44,10 +34,10 @@ const InjectComponent = (props: {
   const [ffmpegWorker, setFfmpegWorker] = useState<any>();
   const [encoding, setEncoding] = useState(false);
   const [encodeProcess, setEncodeProcess] = useState(0);
-  const [timeRange, setTimeRange] = useState<number[]>([
-    duration * 0.1,
-    duration * 0.2,
-  ]);
+  const [timeRange, setTimeRange] = useState<number[]>([]);
+  const [timestampOptions, setTimestampOptions] = useState<
+    { label: string; value: number }[]
+  >([]);
   const [flvHead, setFlvHead] = useState<any>();
   const [metadataTag, setMetadataTag] = useState<any>();
   const fileInfo = metadataTag?.config?.second_amf?.arraymap || {};
@@ -61,13 +51,6 @@ const InjectComponent = (props: {
   const flvParse = async (blob: Blob) => {
     let flv: FLV = new FLV(new TwentyFourDataView(await blob.arrayBuffer()));
     return flv;
-  };
-
-  const flvTagsParse = async (blob: Blob) => {
-    let flvTags: FLVTags = new FLVTags(
-      new TwentyFourDataView(await blob.arrayBuffer())
-    );
-    return flvTags;
   };
 
   const getFlvData = async (
@@ -105,96 +88,17 @@ const InjectComponent = (props: {
     return theBlob;
   };
 
-  const modifyFlvTags = (
-    tags: FLVTag[],
-    startTimestamp: number,
-    endTimestamp: number
-  ) => {
-    const startTagIndex = tags.findIndex(
-      (item: any) =>
-        item.config.tagType === 9 &&
-        item.config.currentTimestamp >= startTimestamp
-    );
-    const startTag: any = tags[startTagIndex];
-    let endTagIndex =
-      tags.findIndex(
-        (item: any) =>
-          item.config.tagType === 9 &&
-          item.config.currentTimestamp >= endTimestamp
-      ) - 1;
-    endTagIndex < 0 && (endTagIndex = tags.length - 1);
-    const endTag: any = tags[endTagIndex];
-
-    // duration
-    const newduration = (endTimestamp - startTimestamp) / 1000;
-    metadataTag.dataView.setFloat64(
-      metadataTag.keyByteOffset.duration,
-      newduration
-    );
-
-    // 处理Tags时间戳
-    const keyTags = [];
-    const modifyKeysLength = metadataTag.keyByteOffset.filepositions.length - 3;
-    let tagTimeSpace = Math.floor((newduration / modifyKeysLength) * 10) / 100;
-    for (let i = startTagIndex; i <= endTagIndex; i++) {
-      const tag: any = tags[i];
-      const newTimestamp = tag.getCombinedTimestamp() - startTimestamp;
-      if (newTimestamp % tagTimeSpace === 0 || i === endTagIndex) {
-        keyTags.push({
-          time: newTimestamp / 1000,
-          offset:
-            tag.config.currentOffset -
-            startTag.config.currentOffset +
-            headByteLength,
-        });
-      }
-      tag.setCombinedTimestamp(newTimestamp >= 0 ? newTimestamp : 0);
+  const getFormatMarkOptions = (times: any) => {
+    let result: any = [];
+    if (times.length) {
+      const list = [...times];
+      if (list[0] === list[1]) list.shift();
+      result = list.map((seconds) => ({
+        label: formatTime(seconds * 1000),
+        value: seconds * 1000,
+      }));
     }
-
-    // 处理 metadata 内容
-    const metaDataTag = metadataTag;
-    // let i = 0;
-    // for (; i <= modifyKeysLength; i++) {
-    //   const { time, offset } = keyTags[i];
-    //   metaDataTag.dataView.setFloat64(
-    //     metaDataTag.keyByteOffset.filepositions[i + 1],
-    //     offset
-    //   );
-    //   metaDataTag.dataView.setFloat64(
-    //     metaDataTag.keyByteOffset.times[i + 1],
-    //     time
-    //   );
-    // }
-    // metaDataTag.dataView.setFloat64(
-    //   metaDataTag.keyByteOffset.filepositions[modifyKeysLength + 1],
-    //   keyTags[keyTags.length - 1].offset
-    // );
-    // metaDataTag.dataView.setFloat64(
-    //   metaDataTag.keyByteOffset.times[modifyKeysLength + 1],
-    //   keyTags[keyTags.length - 1].time
-    // );
-
-    metaDataTag.dataView.setFloat64(
-      metaDataTag.keyByteOffset.lasttimestamp,
-      endTag.getCombinedTimestamp() / 1000
-    );
-    metaDataTag.dataView.setFloat64(
-      metaDataTag.keyByteOffset.lastkeyframetimestamp,
-      endTag.getCombinedTimestamp() / 1000
-    );
-    metaDataTag.dataView.setFloat64(
-      metaDataTag.keyByteOffset.lastkeyframelocation,
-      endTag.config.currentOffset -
-        startTag.config.currentOffset +
-        headByteLength
-    );
-
-    return [
-      startTag.config.currentOffset,
-      endTag.config.currentOffset +
-        endTag.config.byteLength -
-        startTag.config.currentOffset,
-    ];
+    setTimestampOptions(result);
   };
 
   const preHandle = async (url: string) => {
@@ -203,21 +107,35 @@ const InjectComponent = (props: {
     const fileInfoBlob = await getFlvData(url, [0, endLength]);
     const tempFlvHead: any = await flvParse(fileInfoBlob);
     setFlvHead(tempFlvHead);
-    setMetadataTag(new FLVMetaData(tempFlvHead.tags[0].tagData));
+    const metadataTagObj: any = new FLVMetaData(tempFlvHead.tags[0].tagData);
+    getFormatMarkOptions(
+      metadataTagObj?.config?.second_amf?.arraymap?.keyframes?.times?.data || []
+    ); // 获取特定时间帧的选择
+    setMetadataTag(metadataTagObj);
   };
 
   const predictSize = (startTime: number, endTime: number) => {
     const { filepositions, times } = fileInfo?.keyframes || {};
-    if (times?.data?.length && filepositions?.data?.length) {
+    if (startTime === undefined || endTime === undefined) {
+      return '请先选择截取时间点';
+    }
+    if (startTime >= endTime) return '不允许结束时间小于等于开始时间';
+    const startTimestamp = startTime / 1000;
+    const endTimestamp = endTime / 1000;
+    if (
+      startTime < endTime &&
+      times?.data?.length &&
+      filepositions?.data?.length
+    ) {
       const startIndex =
-        times.data.findIndex((num: number) => num > startTime) - 1;
-      let endIndex = times.data.findIndex((num: number) => num >= endTime);
+        times.data.findIndex((num: number) => num > startTimestamp) - 1;
+      let endIndex = times.data.findIndex((num: number) => num >= endTimestamp);
       endIndex < 0 && (endIndex = times.length - 1);
-
       const size =
         filepositions.data[endIndex] - filepositions.data[startIndex];
-      return (size / 1024 / 1024 + 2.5).toFixed(2);
+      return (size / 1024 / 1024 + 2.5).toFixed(2) + ' MB';
     }
+
     return '无法预估';
   };
 
@@ -237,23 +155,16 @@ const InjectComponent = (props: {
             setProcess(Math.round((loaded / total) * 100));
           }
         );
-        const flvContent: any = await flvTagsParse(fileContentBlob);
-        const [startTagOffset, contentLength] = modifyFlvTags(
-          flvContent.tags,
-          startTime * 1000,
-          endTime * 1000
-        );
-
         const targetFile = new Blob([
           new DataView(flvHead.buffer, 0, headByteLength),
-          new DataView(flvContent.buffer, startTagOffset, contentLength),
+          fileContentBlob,
         ]);
-
         if (enableEncode)
           // 编码mp4
-          await encodeVideo(targetFile);
+          await encodeVideoMP4(targetFile);
         else {
-          downFileToLocal(validateFileName + '.flv', targetFile);
+          // 编码flv， 自动纠正时间、metadata信息 （不再使用手动处理）
+          await encodeVideoFlv(targetFile);
         }
         setDownloading(false);
         setVisible(false);
@@ -269,20 +180,8 @@ const InjectComponent = (props: {
     preHandle(streamUrl);
   }, [streamUrl]);
 
-  const formatTime = (rangeOne: number, needHour?: boolean) => {
-    const seconds = rangeOne / 1000;
-    const minutes = Math.floor(seconds / 60);
-    const hour = Math.floor(minutes / 60);
-    return (
-      (hour || needHour ? `${fill0(hour)}:` : '') +
-      fill0(minutes % 60) +
-      ':' +
-      fill0((seconds % 60).toFixed(0))
-    );
-  };
-
   // 编码视频
-  const encodeVideo = async (blob: Blob) => {
+  const encodeVideoMP4 = async (blob: Blob) => {
     setEncoding(true);
     try {
       const ffmpeg = ffmpegWorker;
@@ -314,6 +213,38 @@ const InjectComponent = (props: {
     }
   };
 
+  const encodeVideoFlv = async (blob: Blob) => {
+    setEncoding(true);
+    try {
+      const ffmpeg = ffmpegWorker;
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
+      ffmpeg.FS(
+        'writeFile',
+        'input.flv',
+        new Uint8Array(await blob.arrayBuffer())
+      );
+      await ffmpeg.run(
+        '-i',
+        'input.flv',
+        '-y',
+        '-c',
+        'copy',
+        '-flvflags',
+        'add_keyframe_index',
+        'output.flv'
+      );
+      const data = ffmpeg.FS('readFile', 'output.flv');
+      const file = new Blob([data.buffer]);
+      downFileToLocal(validateFileName + '.flv', file);
+      setEncoding(false);
+    } catch (e) {
+      downFileToLocal(validateFileName + '.flv', blob);
+      setEncoding(false);
+    }
+  };
+
   // 初始化 ffmpeg
   useEffect(() => {
     // @ts-ignore
@@ -340,10 +271,16 @@ const InjectComponent = (props: {
           style={{ width: 'fit-content', maxWidth: 'unset' }}
           getPopupContainer={(node) => node.parentElement as HTMLElement}
           popupVisible={visible}
-          okButtonProps={{ loading: downloading }}
+          okButtonProps={{
+            loading: downloading,
+            disabled:
+              timeRange[0] === undefined ||
+              timeRange[1] === undefined ||
+              timeRange[1] <= timeRange[0],
+          }}
           cancelButtonProps={{ disabled: downloading }}
           title={
-            <div style={{ width: 480 }}>
+            <div style={{ width: 500 }}>
               <div
                 style={{
                   display: 'flex',
@@ -353,7 +290,7 @@ const InjectComponent = (props: {
               >
                 <div>
                   视频截取下载
-                  <Tooltip content="建议截取视频时，将前后时间点往前往后偏移3-5s，(秒数末尾是0或5最好)，确保获取需要的截内容">
+                  <Tooltip content="因视频编码格式，为保证在无需重新编码即可获取到对应片段。所以采取只能从特定的视频关键依赖帧的时间点进行裁剪（加快导出速度）">
                     <IconQuestionCircle />
                   </Tooltip>
                 </div>
@@ -366,55 +303,47 @@ const InjectComponent = (props: {
                   </Tooltip>
                 </div>
               </div>
-              <Slider
-                range
-                disabled={downloading}
-                min={0}
-                max={duration}
-                step={1000}
-                style={{ width: '96%' }}
-                value={timeRange}
-                onChange={setTimeRange as any}
-                formatTooltip={(value) => {
-                  return formatTime(value);
-                }}
-              />
+
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  margin: '8px 0',
                 }}
               >
                 <div>
-                  截取起始时间：
-                  {formatTime(timeRange[0])}{' '}
-                  <MyTimePicker
-                    duration={duration}
-                    value={formatTime(timeRange[0], true)}
-                    onChange={(v: number) =>
-                      v < timeRange[1] && setTimeRange([v, timeRange[1]])
-                    }
+                  截取: 起始时间:
+                  <TimestampSelect
+                    placeholder="起始时间"
+                    disabled={downloading}
+                    options={timestampOptions}
+                    value={timeRange[0]}
+                    onChange={(v: number) => {
+                      setTimeRange([v, timeRange[1]]);
+                    }}
                   />
                 </div>
                 <div>
-                  截取结束时间：
-                  {formatTime(timeRange[1])}{' '}
-                  <MyTimePicker
-                    duration={duration}
-                    value={formatTime(timeRange[1], true)}
-                    onChange={(v: number) =>
-                      v > timeRange[0] && setTimeRange([timeRange[0], v])
-                    }
+                  结束时间:
+                  <TimestampSelect
+                    placeholder="结束时间"
+                    disabled={downloading}
+                    options={timestampOptions}
+                    value={timeRange[1]}
+                    onChange={(v: number) => {
+                      setTimeRange([timeRange[0], v]);
+                    }}
                   />
                 </div>
 
                 <Checkbox
                   checked={enableEncode}
+                  disabled={downloading}
                   onChange={(v) => setEnableEncode(v)}
                 >
                   导出为mp4
-                  <Tooltip content="不开启则导出视频为flv格式，mp4格式文件受更多剪辑软件支持。且该转换为无损转换、速度快，如无特殊情况建议开启。tips：开启该功能需要更多的运行内存，建议系统内存至少有4G以上。(不过目前也没测试更多)">
+                  <Tooltip content="不开启则导出视频为flv格式，mp4格式文件受更多剪辑软件支持。且该转换为无损转换、速度快，如无特殊情况建议开启。">
                     <IconQuestionCircle />
                   </Tooltip>
                 </Checkbox>
@@ -425,13 +354,14 @@ const InjectComponent = (props: {
                 <div style={{ width: 88 }}>文件名字：</div>
                 <Input
                   value={fileName}
+                  disabled={downloading}
                   onChange={(v) => setFileName(v)}
                   addAfter={enableEncode ? '.mp4' : '.flv'}
                 />
               </div>
               <div style={{ marginTop: 4 }}>
                 预估下载文件大小：
-                {predictSize(timeRange[0] / 1000, timeRange[1] / 1000)} MB
+                {predictSize(timeRange[0], timeRange[1])}
                 <Tooltip content="会有数MB的大小预估偏差">
                   <IconQuestionCircle />
                 </Tooltip>
@@ -452,7 +382,7 @@ const InjectComponent = (props: {
           }
           onOk={() => {
             const [b, e] = timeRange;
-            downloadPart(b / 1000, e / 1000);
+            if (b >= 0 && e >= 0) downloadPart(b / 1000, e / 1000);
           }}
           onCancel={() => {
             setVisible(false);
@@ -475,38 +405,135 @@ const InjectComponent = (props: {
 
 export default InjectComponent;
 
-const MyTimePicker = (props: any) => {
-  const [visible, setVisible] = useState(false);
-
-  const { value, onChange, duration } = props;
+const TimestampSelect = (props: any) => {
+  const { value, onChange, options, placeholder, disabled } = props;
 
   return (
-    <Trigger
-      popupVisible={visible}
+    <Select
+      placeholder={placeholder}
+      showSearch
+      value={value}
+      disabled={disabled}
+      style={{ width: 100 }}
       getPopupContainer={(node) => node.parentElement as any}
-      onClickOutside={() => setVisible(false)}
-      popup={() => (
-        <div className="demo-trigger-popup">
-          <TimePicker
-            style={{ width: 194 }}
-            getPopupContainer={(node) => node.parentElement as any}
-            showNowBtn={false}
-            value={value}
-            onChange={(valueString) => {
-              const [h, m, s] = valueString.split(':');
-              const ms = (Number(h) * 3600 + Number(m) * 60 + Number(s)) * 1000;
-              if (ms <= duration) {
-                onChange?.(ms);
-                setVisible(false);
-              }
-            }}
-          />
-        </div>
-      )}
-      trigger="click"
-      classNames="zoomInTop"
+      onChange={onChange}
+      filterOption={(inputValue, option) =>
+        option.props.children.toLowerCase().indexOf(inputValue.toLowerCase()) >=
+        0
+      }
     >
-      <IconEdit onClick={() => setVisible(!visible)} />
-    </Trigger>
+      {options.map((item: any) => (
+        <Select.Option key={item.value} value={item.value}>
+          {item.label}
+        </Select.Option>
+      ))}
+    </Select>
   );
 };
+
+// download part的处理  手动处理tag，一定程度上速度比ffmpeg快，但修改的信息不全面
+// const flvContent: any = await flvTagsParse(fileContentBlob);
+// const [startTagOffset, contentLength] = modifyFlvTags(
+//   flvContent.tags,
+//   startTime * 1000,
+//   endTime * 1000
+// );
+
+// const flvTagsParse = async (blob: Blob) => {
+//   let flvTags: FLVTags = new FLVTags(
+//     new TwentyFourDataView(await blob.arrayBuffer())
+//   );
+//   return flvTags;
+// };
+
+// const modifyFlvTags = (
+//   tags: FLVTag[],
+//   startTimestamp: number,
+//   endTimestamp: number
+// ) => {
+//   const startTagIndex = tags.findIndex(
+//     (item: any) =>
+//       item.config.tagType === 9 &&
+//       item.config.currentTimestamp >= startTimestamp
+//   );
+//   const startTag: any = tags[startTagIndex];
+//   let endTagIndex =
+//     tags.findIndex(
+//       (item: any) =>
+//         item.config.tagType === 9 &&
+//         item.config.currentTimestamp >= endTimestamp
+//     ) - 1;
+//   endTagIndex < 0 && (endTagIndex = tags.length - 1);
+//   const endTag: any = tags[endTagIndex];
+
+//   // duration
+//   const newduration = (endTimestamp - startTimestamp) / 1000;
+//   metadataTag.dataView.setFloat64(
+//     metadataTag.keyByteOffset.duration,
+//     newduration
+//   );
+
+//   // 处理Tags时间戳
+//   const keyTags = [];
+//   const modifyKeysLength = metadataTag.keyByteOffset.filepositions.length - 3;
+//   let tagTimeSpace = Math.floor((newduration / modifyKeysLength) * 10) / 100;
+//   for (let i = startTagIndex; i <= endTagIndex; i++) {
+//     const tag: any = tags[i];
+//     const newTimestamp = tag.getCombinedTimestamp() - startTimestamp;
+//     if (newTimestamp % tagTimeSpace === 0 || i === endTagIndex) {
+//       keyTags.push({
+//         time: newTimestamp / 1000,
+//         offset:
+//           tag.config.currentOffset -
+//           startTag.config.currentOffset +
+//           headByteLength,
+//       });
+//     }
+//     tag.setCombinedTimestamp(newTimestamp >= 0 ? newTimestamp : 0);
+//   }
+
+//   // 处理 metadata 内容
+//   const metaDataTag = metadataTag;
+//   // let i = 0;
+//   // for (; i <= modifyKeysLength; i++) {
+//   //   const { time, offset } = keyTags[i];
+//   //   metaDataTag.dataView.setFloat64(
+//   //     metaDataTag.keyByteOffset.filepositions[i + 1],
+//   //     offset
+//   //   );
+//   //   metaDataTag.dataView.setFloat64(
+//   //     metaDataTag.keyByteOffset.times[i + 1],
+//   //     time
+//   //   );
+//   // }
+//   // metaDataTag.dataView.setFloat64(
+//   //   metaDataTag.keyByteOffset.filepositions[modifyKeysLength + 1],
+//   //   keyTags[keyTags.length - 1].offset
+//   // );
+//   // metaDataTag.dataView.setFloat64(
+//   //   metaDataTag.keyByteOffset.times[modifyKeysLength + 1],
+//   //   keyTags[keyTags.length - 1].time
+//   // );
+
+//   metaDataTag.dataView.setFloat64(
+//     metaDataTag.keyByteOffset.lasttimestamp,
+//     endTag.getCombinedTimestamp() / 1000
+//   );
+//   metaDataTag.dataView.setFloat64(
+//     metaDataTag.keyByteOffset.lastkeyframetimestamp,
+//     endTag.getCombinedTimestamp() / 1000
+//   );
+//   metaDataTag.dataView.setFloat64(
+//     metaDataTag.keyByteOffset.lastkeyframelocation,
+//     endTag.config.currentOffset -
+//       startTag.config.currentOffset +
+//       headByteLength
+//   );
+
+//   return [
+//     startTag.config.currentOffset,
+//     endTag.config.currentOffset +
+//       endTag.config.byteLength -
+//       startTag.config.currentOffset,
+//   ];
+// };

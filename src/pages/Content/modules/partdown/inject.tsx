@@ -86,7 +86,7 @@ const InjectApp = () => {
 
 const inject = () => {
   chrome.storage.sync.get(['enableDownload'], function (result) {
-    if (result.enableDownload) {
+    if (result.enableDownload === undefined || result.enableDownload) {
       const injectDOM = document.createElement('div');
       injectDOM.id = 'handle-video-download';
       document.body.appendChild(injectDOM);

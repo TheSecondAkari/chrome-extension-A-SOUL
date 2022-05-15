@@ -17,3 +17,19 @@ export function downFileToLocal(fileName: string, blob: Blob) {
     window.URL.revokeObjectURL(d.href)
 }
 
+const fill0 = (str: string | number) => {
+    const temp = `${str}`;
+    return temp.length === 1 ? '0' + temp : temp;
+};
+
+export const formatTime = (rangeOne: number, needHour?: boolean) => {
+    const seconds = rangeOne / 1000;
+    const minutes = Math.floor(seconds / 60);
+    const hour = Math.floor(minutes / 60);
+    return (
+        (hour || needHour ? `${fill0(hour)}:` : '') +
+        fill0(minutes % 60) +
+        ':' +
+        fill0((seconds % 60).toFixed(0))
+    );
+};
