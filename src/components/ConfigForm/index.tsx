@@ -18,6 +18,7 @@ import {
   sendMessageToContentScript,
 } from '../../utils';
 import './index.css';
+import { OriginIcon } from '../OriginIcon';
 
 const FormItem = Form.Item;
 
@@ -84,7 +85,9 @@ const ConfigForm = (props: { type: 'popup' | 'options' }) => {
 
       <div style={{ height: '100%' }}>
         <div className="title">
-          <div>插件信息配置</div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            插件信息配置 <OriginIcon />
+          </div>
           <div style={{ fontSize: '14px', display: 'flex' }}>
             <div>
               启动闲置提示:{' '}

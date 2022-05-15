@@ -16,6 +16,7 @@ import TwentyFourDataView from './utils/twenty-four-dataview';
 import FLV from './utils/flvparser/flv';
 // import FLVTag from './utils/flvparser/flv-tag';
 // import FLVTags from './utils/flvparser/flv-tags';
+import { OriginIcon } from '../../../../components/OriginIcon';
 import { downFileToLocal, formatTime } from './utils/common';
 import '@arco-design/web-react/dist/css/arco.css';
 
@@ -297,13 +298,15 @@ const InjectComponent = (props: {
                     <IconQuestionCircle />
                   </Tooltip>
                 </div>
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <a href={streamUrl} download={`${validateFileName}.flv`}>
                     下载完整视频
                   </a>
                   <Tooltip content="下载完整视频暂时支持flv格式">
                     <IconQuestionCircle />
                   </Tooltip>
+
+                  <OriginIcon />
                 </div>
               </div>
 
