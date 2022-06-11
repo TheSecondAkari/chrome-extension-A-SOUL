@@ -331,8 +331,8 @@ const InjectComponent = (props: {
                   style={{
                     position: 'absolute',
                     width: 300,
-                    bottom: -23,
-                    right: -5,
+                    bottom: -17,
+                    right: -25,
                   }}
                 />
               </div>
@@ -502,6 +502,7 @@ const TimestampSelect = (props: any) => {
   );
 };
 
+// 放弃采用手动处理方式
 // download part的处理  手动处理tag，一定程度上速度比ffmpeg快，但修改的信息不全面
 // const flvContent: any = await flvTagsParse(fileContentBlob);
 // const [startTagOffset, contentLength] = modifyFlvTags(

@@ -1,6 +1,6 @@
 #handle-video-download {
   position: fixed;
-  left: 32px;
+  left: 40px;
   bottom: 40px;
   z-index: 1000;
 }
