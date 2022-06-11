@@ -1,7 +1,7 @@
 #handle-video-download {
   position: fixed;
-  left: 24px;
-  bottom: 24px;
+  left: 32px;
+  bottom: 40px;
   z-index: 1000;
 }
 
@@ -15,4 +15,32 @@
 
 .demo-trigger-icon-click:hover {
   color: blue;
+}
+
+.download-trigger-button {
+  background: #8d81da !important;
+  box-shadow: 0 0 4px 4px rgb(153 151 151 / 68%);
+}
+
+.download-trigger-button:hover {
+  background: #b4ade6 !important;
+}
+
+.download-trigger-button:active {
+  background: #b4ade6 !important;
+}
+
+@keyframes bounce-down {
+  25% {
+    transform: translateY(-4px);
+  }
+
+  50%,
+  100% {
+    transform: translateY(0);
+  }
+
+  75% {
+    transform: translateY(4px);
+  }
 }

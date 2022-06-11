@@ -1,3 +1,4 @@
+// 都是服务于tips的旧逻辑，不需要了
 import { pickTriggerConfig } from './getConfig';
 
 // 获取当前激活 tab

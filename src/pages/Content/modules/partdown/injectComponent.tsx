@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Checkbox,
   Input,
@@ -16,9 +17,20 @@ import TwentyFourDataView from './utils/twenty-four-dataview';
 import FLV from './utils/flvparser/flv';
 // import FLVTag from './utils/flvparser/flv-tag';
 // import FLVTags from './utils/flvparser/flv-tags';
-import { OriginIcon } from '../../../../components/OriginIcon';
+// import { OriginIcon } from '../../../../components/OriginIcon';
 import { downFileToLocal, formatTime } from './utils/common';
 import '@arco-design/web-react/dist/css/arco.css';
+
+const spaceBetweenStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+
+const primaryColor = '#b4ade6';
+
+const icon_jellyfish = chrome.runtime.getURL('./public/水母.png');
+const q_img_ava = chrome.runtime.getURL('./public/ava.png');
 
 // ! 不再手动处理flv的Tag信息，采用ffmpeg去处理
 // duration 时长，毫秒
@@ -270,120 +282,146 @@ const InjectComponent = (props: {
     <div style={{ position: 'relative' }}>
       {fileInfo?.keyframes?.filepositions?.data?.length ? (
         <Popconfirm
+          icon={null}
           position="tr"
           style={{ width: 'fit-content', maxWidth: 'unset' }}
           getPopupContainer={(node) => node.parentElement as HTMLElement}
           popupVisible={visible}
-          triggerProps={{ unmountOnExit: false }}
+          triggerProps={{
+            unmountOnExit: false,
+            popupStyle: { borderRadius: '25px' },
+          }}
           okButtonProps={{
             loading: downloading,
+            style: { borderRadius: 12 },
             disabled:
               timeRange[0] === undefined ||
               timeRange[1] === undefined ||
               timeRange[1] <= timeRange[0],
           }}
-          cancelButtonProps={{ disabled: downloading }}
+          cancelButtonProps={{
+            disabled: downloading,
+            style: { borderRadius: 12 },
+          }}
           title={
-            <div style={{ width: 500 }}>
+            <div style={{ width: 550, margin: -16 }}>
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  justifyItems: 'center',
+                  ...spaceBetweenStyle,
+                  background: primaryColor,
+                  padding: '10px 16px 8px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  borderRadius: '25px 25px 0 0',
+                  position: 'relative',
                 }}
               >
                 <div>
                   视频截取下载
                   <Tooltip content="因视频编码格式，为保证在无需重新编码即可获取到对应片段。所以采取只能从特定的视频关键依赖帧的时间点进行裁剪（加快导出速度）">
-                    <IconQuestionCircle />
+                    <IconQuestionCircle
+                      style={{ marginLeft: 4, strokeWidth: 5 }}
+                    />
                   </Tooltip>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <a href={streamUrl} download={`${validateFileName}.flv`}>
-                    下载完整视频
-                  </a>
-                  <Tooltip content="下载完整视频暂时支持flv格式">
-                    <IconQuestionCircle />
-                  </Tooltip>
 
-                  <OriginIcon />
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  margin: '8px 0',
-                }}
-              >
-                <div>
-                  截取: 起始时间:
-                  <TimestampSelect
-                    placeholder="起始时间"
-                    disabled={downloading}
-                    options={timestampOptions}
-                    value={timeRange[0]}
-                    onChange={(v: number) => {
-                      setTimeRange([v, timeRange[1]]);
-                    }}
-                  />
-                </div>
-                <div>
-                  结束时间:
-                  <TimestampSelect
-                    placeholder="结束时间"
-                    disabled={downloading}
-                    options={timestampOptions}
-                    value={timeRange[1]}
-                    onChange={(v: number) => {
-                      setTimeRange([timeRange[0], v]);
-                    }}
-                  />
-                </div>
-
-                <Checkbox
-                  checked={enableEncode}
-                  disabled={downloading}
-                  onChange={(v) => setEnableEncode(v)}
-                >
-                  导出为mp4
-                  <Tooltip content="不开启则导出视频为flv格式，mp4格式文件受更多剪辑软件支持。且该转换为无损转换、速度快，如无特殊情况建议开启。">
-                    <IconQuestionCircle />
-                  </Tooltip>
-                </Checkbox>
-              </div>
-              <div
-                style={{ display: 'flex', alignItems: 'center', marginTop: 4 }}
-              >
-                <div style={{ width: 88 }}>文件名字：</div>
-                <Input
-                  value={fileName}
-                  disabled={downloading}
-                  onChange={(v) => setFileName(v)}
-                  addAfter={enableEncode ? '.mp4' : '.flv'}
+                <img
+                  src={q_img_ava}
+                  alt="ava"
+                  style={{
+                    position: 'absolute',
+                    width: 300,
+                    bottom: -23,
+                    right: -5,
+                  }}
                 />
               </div>
-              <div style={{ marginTop: 4 }}>
-                预估下载文件大小：
-                {predictSize(timeRange[0], timeRange[1])}
-                <Tooltip content="会有数MB的大小预估偏差">
-                  <IconQuestionCircle />
-                </Tooltip>
+              <div style={{ padding: '10px 16px' }}>
+                <div style={{ ...spaceBetweenStyle }}>
+                  <div>
+                    截取: 起始时间:&nbsp;
+                    <TimestampSelect
+                      placeholder="起始时间"
+                      disabled={downloading}
+                      options={timestampOptions}
+                      value={timeRange[0]}
+                      onChange={(v: number) => {
+                        setTimeRange([v, timeRange[1]]);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    结束时间:&nbsp;
+                    <TimestampSelect
+                      placeholder="结束时间"
+                      disabled={downloading}
+                      options={timestampOptions}
+                      value={timeRange[1]}
+                      onChange={(v: number) => {
+                        setTimeRange([timeRange[0], v]);
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <a href={streamUrl} download={`${validateFileName}.flv`}>
+                      下载完整视频
+                    </a>
+                    <Tooltip content="下载完整视频暂时支持flv格式">
+                      <IconQuestionCircle />
+                    </Tooltip>
+
+                    {/* <OriginIcon /> */}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: '10px 0',
+                  }}
+                >
+                  <div style={{ width: 88 }}>文件名字：</div>
+                  <Input
+                    value={fileName}
+                    disabled={downloading}
+                    onChange={(v) => setFileName(v)}
+                    addAfter={enableEncode ? '.mp4' : '.flv'}
+                  />
+                </div>
+                <div style={{ ...spaceBetweenStyle, marginTop: 6 }}>
+                  <div>
+                    预估文件大小：
+                    {predictSize(timeRange[0], timeRange[1])}
+                    <Tooltip content="会有数MB的大小预估偏差">
+                      <IconQuestionCircle />
+                    </Tooltip>
+                  </div>
+
+                  <Checkbox
+                    checked={enableEncode}
+                    disabled={downloading}
+                    onChange={(v) => setEnableEncode(v)}
+                  >
+                    导出为mp4
+                    <Tooltip content="不开启则导出视频为flv格式，mp4格式文件受更多剪辑软件支持。且该转换为无损转换、速度快，如无特殊情况建议开启。">
+                      <IconQuestionCircle />
+                    </Tooltip>
+                  </Checkbox>
+                </div>
+                {downloading ? (
+                  <div>
+                    下载进度：
+                    <Progress percent={process} />
+                  </div>
+                ) : null}
+                {encoding ? (
+                  <div>
+                    编译进度：
+                    <Progress percent={encodeProcess} />
+                  </div>
+                ) : null}
               </div>
-              {downloading ? (
-                <div>
-                  下载进度：
-                  <Progress percent={process} />
-                </div>
-              ) : null}
-              {encoding ? (
-                <div>
-                  编译进度：
-                  <Progress percent={encodeProcess} />
-                </div>
-              ) : null}
             </div>
           }
           onOk={() => {
@@ -398,19 +436,37 @@ const InjectComponent = (props: {
           {downloading ? (
             <Progress
               style={{ position: 'absolute', left: -16, top: -16 }}
+              showText={false}
+              size="large"
               type="circle"
               percent={encoding ? encodeProcess : process}
-              status={encoding ? 'success' : 'normal'}
+              color={encoding ? primaryColor : '#8d81da'}
             />
           ) : null}
 
           <Button
+            className="download-trigger-button"
+            style={{
+              ...spaceBetweenStyle,
+              justifyContent: 'center',
+              width: 50,
+              height: 50,
+            }}
             onClick={() => {
               setVisible(!visible);
             }}
             shape="circle"
             type="primary"
-            icon={<IconDownload />}
+            icon={
+              <img
+                alt="jellyfish"
+                src={icon_jellyfish}
+                style={{
+                  height: 42,
+                  animation: 'bounce-down 1.6s linear infinite',
+                }}
+              />
+            }
           />
         </Popconfirm>
       ) : null}

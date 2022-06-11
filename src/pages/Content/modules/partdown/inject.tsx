@@ -24,7 +24,7 @@ const InjectApp = () => {
   const [pNum, setPNum] = useState(0);
   const [stream, setStream] = useState<any>({});
   const [pageUrl, setPageUrl] = useState(location.href);
-  const videoTitle = (document.getElementsByClassName('tit tr-fix')?.[0] as any)
+  const videoTitle = (document.getElementsByClassName('tit')?.[0] as any)
     ?.innerText;
 
   useEffect(() => {
@@ -40,12 +40,12 @@ const InjectApp = () => {
 
   const handle = async () => {
     if (window.location.href.startsWith('https://www.bilibili.com/video')) {
-      const bvid = window.location.pathname.split('/')[2];
+      const aid_or_bvid = window.location.pathname.split('/')[2];
       const p = Number(getUrlAllParams()?.p || 0);
       setPNum(p);
-      const list = await getPageList(bvid);
+      const list = await getPageList(aid_or_bvid);
       const { cid } = list[p > 0 ? p - 1 : p];
-      const streamInfo = await getVideoStream(bvid, cid);
+      const streamInfo = await getVideoStream(aid_or_bvid, cid);
       streamInfo?.durl?.forEach((item: any) =>
         item.url.replace('http://', 'https://')
       );
@@ -53,18 +53,24 @@ const InjectApp = () => {
     }
   };
 
-  const getPageList = async (bvid: string) => {
-    const api_url = `https://api.bilibili.com/x/player/pagelist?bvid=${bvid}`;
+  const getPageList = async (videoId: string) => {
+    const params = videoId.startsWith('av') // 判断是aid 还是 bvid
+      ? `aid=${videoId.slice(2)}`
+      : `bvid=${videoId}`;
+    const api_url = `https://api.bilibili.com/x/player/pagelist?${params}`;
     const re = await fetch(api_url, { credentials: 'include' });
     const apiJson = await re.json();
     setPageList(apiJson.data);
     return apiJson.data;
   };
 
-  const getVideoStream = async (bvid: string, cid: string) => {
+  const getVideoStream = async (videoId: string, cid: string) => {
     const apiPath = '/x/player/playurl';
     const qn = '120';
-    const api_url = `https://api.bilibili.com${apiPath}?bvid=${bvid}&cid=${cid}&otype=json&fourk=1&qn=${qn}`;
+    const params = videoId.startsWith('av') // 判断是aid 还是 bvid
+      ? `avid=${videoId.slice(2)}`
+      : `bvid=${videoId}`;
+    const api_url = `https://api.bilibili.com${apiPath}?${params}&cid=${cid}&otype=json&fourk=1&qn=${qn}`;
 
     const re = await fetch(api_url, { credentials: 'include' });
     const apiJson = await re.json();

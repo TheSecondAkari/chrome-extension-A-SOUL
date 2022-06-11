@@ -1,3 +1,4 @@
+// 都是服务于tips的旧逻辑，不需要了
 import { initiConfig } from '../../../utils/config';
 
 // 随机排序

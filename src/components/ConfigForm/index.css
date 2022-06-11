@@ -1,3 +1,11 @@
+.wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .bg {
   position: absolute;
   z-index: 5;
@@ -15,7 +23,7 @@
   font-size: 18px;
   font-weight: 500;
   margin: 16px 24px 0;
-  display:  flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
