@@ -223,7 +223,9 @@ const InjectComponent = (props: {
       downFileToLocal(validateFileName + '.mp4', file);
       setEncoding(false);
     } catch (e) {
-      Message.warning('尝试视频编码mp4失败');
+      Message.warning(
+        '尝试视频编码mp4失败, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)'
+      );
       setEncoding(false);
     }
   };
@@ -255,7 +257,9 @@ const InjectComponent = (props: {
       downFileToLocal(validateFileName + '.flv', file);
       setEncoding(false);
     } catch (e) {
-      downFileToLocal(validateFileName + '.flv', blob);
+      Message.warning(
+        '下载视频片段完整性受损, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)'
+      );
       setEncoding(false);
     }
   };
