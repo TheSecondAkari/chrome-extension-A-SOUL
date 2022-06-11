@@ -1,5 +1,6 @@
 # chrome-extension-A-SOUL
-功能1： 浏览器屏保  ； 功能2：b站视频截取下载
+- 功能：b站视频截取下载（作为唯一主功能）
+- 功能： 浏览器屏保（移除，有问题也不再维护）【旧master分支保留】
 
 # 使用本插件要求：
 - 如果你是A-SOUL的粉丝，请保持对五个女孩的爱
@@ -25,14 +26,12 @@
 
 # 打包
 - yarn build
-
-
-如果大家想共建的话，欢迎。 按默认的共建流程就行
+- 如果大家想共建的话，欢迎。 按默认的共建流程就行
 
 
 # 感谢
-https://github.com/Xmader/bilitwin （视频下载功能，部分代码参考该项目）
-https://ffmpegwasm.netlify.app/#demo （视频编码功能）
+- https://github.com/Xmader/bilitwin （视频下载功能，部分代码参考该项目）
+- https://ffmpegwasm.netlify.app/#demo （视频编码功能）
 
 # 维护迭代
-    待定
+    后续会将视频下载功能作为唯一功能迭代。 闲置提醒移除
