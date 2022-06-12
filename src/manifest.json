@@ -13,7 +13,7 @@
   "icons": {
     "128": "icon-128.png"
   },
-  "permissions": ["contextMenus", "management", "activeTab", "tabs", "storage"],
+  "permissions": ["contextMenus", "management", "storage"],
   "content_scripts": [
     {
       "matches": [
@@ -30,12 +30,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "content.styles.css",
-        "icon-128.png",
-        "icon-34.png",
-        "public/*"
-      ],
+      "resources": ["icon-128.png", "icon-34.png", "public/*"],
       "matches": ["<all_urls>"]
     }
   ]

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Checkbox,
   Input,
@@ -9,7 +8,7 @@ import {
   Select,
   Tooltip,
 } from '@arco-design/web-react';
-import { IconDownload, IconQuestionCircle } from '@arco-design/web-react/icon';
+import { IconQuestionCircle } from '@arco-design/web-react/icon';
 import { useEffect, useState } from 'react';
 import DetailedFetchBlob from './utils/detailed-fetch-blob';
 import FLVMetaData from './utils/flvparser/flv-metadata';
@@ -41,6 +40,7 @@ const InjectComponent = (props: {
 }) => {
   const { streamUrl, duration, videoTitle } = props;
   const [visible, setVisible] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
   const [process, setProcess] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [enableEncode, setEnableEncode] = useState(true);
@@ -182,11 +182,12 @@ const InjectComponent = (props: {
         setDownloading(false);
         setProcess(0);
         setEncodeProcess(0);
-        setVisible(false);
       }
     } catch (e) {
       console.log(e);
       setDownloading(false);
+      setProcess(0);
+      setEncodeProcess(0);
     }
   };
 
@@ -222,11 +223,14 @@ const InjectComponent = (props: {
       const file = new Blob([data.buffer], { type: 'video/mp4' });
       downFileToLocal(validateFileName + '.mp4', file);
       setEncoding(false);
+      setErrMsg('');
     } catch (e) {
-      Message.warning(
-        '尝试视频编码mp4失败, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)'
-      );
+      const msg =
+        '尝试视频编码mp4失败, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)';
+      setErrMsg(msg);
+      Message.warning(msg);
       setEncoding(false);
+      setVisible(true);
     }
   };
 
@@ -256,11 +260,14 @@ const InjectComponent = (props: {
       const file = new Blob([data.buffer]);
       downFileToLocal(validateFileName + '.flv', file);
       setEncoding(false);
+      setErrMsg('');
     } catch (e) {
-      Message.warning(
-        '下载视频片段完整性受损, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)'
-      );
+      const msg =
+        '下载视频片段完整性受损, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)';
+      setErrMsg(msg);
+      Message.warning(msg);
       setEncoding(false);
+      setVisible(true);
     }
   };
 
@@ -413,6 +420,12 @@ const InjectComponent = (props: {
                     </Tooltip>
                   </Checkbox>
                 </div>
+                {errMsg ? (
+                  <div style={{ marginTop: 8, fontSize: '12px', color: 'red' }}>
+                    {errMsg}
+                  </div>
+                ) : null}
+
                 {downloading ? (
                   <div>
                     下载进度：
