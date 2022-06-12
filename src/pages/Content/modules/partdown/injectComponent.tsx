@@ -2,7 +2,6 @@ import {
   Button,
   Checkbox,
   Input,
-  Message,
   Popconfirm,
   Progress,
   Select,
@@ -191,6 +190,9 @@ const InjectComponent = (props: {
     }
   };
 
+  const defaultErrMsg =
+    '下载片段完整性受损, 请稍等10-15分钟左右再刷新页面重试(原因：可能视频接口不稳定）\n期间可尝试前往其他页面下载视频不冲突';
+
   // 预解析，是否支持索引特定起点、终点
   useEffect(() => {
     preHandle(streamUrl);
@@ -225,10 +227,7 @@ const InjectComponent = (props: {
       setEncoding(false);
       setErrMsg('');
     } catch (e) {
-      const msg =
-        '尝试视频编码mp4失败, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)';
-      setErrMsg(msg);
-      Message.warning(msg);
+      setErrMsg(defaultErrMsg);
       setEncoding(false);
       setVisible(true);
     }
@@ -262,10 +261,7 @@ const InjectComponent = (props: {
       setEncoding(false);
       setErrMsg('');
     } catch (e) {
-      const msg =
-        '下载视频片段完整性受损, 请稍等15分钟左右再刷新页面重试(可能视频接口不稳定)';
-      setErrMsg(msg);
-      Message.warning(msg);
+      setErrMsg(defaultErrMsg);
       setEncoding(false);
       setVisible(true);
     }
@@ -421,7 +417,14 @@ const InjectComponent = (props: {
                   </Checkbox>
                 </div>
                 {errMsg ? (
-                  <div style={{ marginTop: 8, fontSize: '12px', color: 'red' }}>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      fontSize: '12px',
+                      color: 'red',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
                     {errMsg}
                   </div>
                 ) : null}
