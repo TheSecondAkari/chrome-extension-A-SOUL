@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "asoul-切片王来咯🥵🥵🥵，具备b站部分视频的截取下载能力。比你们更喜欢晚晚，向晚是我老婆！",
   "scripts": {
-    "build": "node utils/build.js",
+    "build": "cross-env ChromeExtensionVersion=2 node utils/build.js && cross-env ChromeExtensionVersion=3 node utils/build.js",
+    "build2": "cross-env ChromeExtensionVersion=2 node utils/build.js",
+    "build3": "cross-env ChromeExtensionVersion=3 node utils/build.js",
     "start": "node utils/webserver.js",
+    "start2": "cross-env ChromeExtensionVersion=2 node utils/webserver.js",
+    "start3": "cross-env ChromeExtensionVersion=3 node utils/webserver.js",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "dependencies": {
@@ -12,6 +16,7 @@
     "@hot-loader/react-dom": "^17.0.2",
     "axios": "^0.26.1",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "cross-env": "^7.0.3",
     "react": "^17.0.2",
     "react-dock": "^0.5.1",
     "react-dom": "^17.0.2",

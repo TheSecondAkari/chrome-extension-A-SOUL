@@ -33,6 +33,10 @@ if (fileSystem.existsSync(secretsPath)) {
   alias['secrets'] = secretsPath;
 }
 
+// 打包的插件版本 
+const ChromeExtensionVersion = Number(process.env.ChromeExtensionVersion || '3')  // 若没设置，默认使用 3 版本
+const CommonOutPutDir = path.join(__dirname, 'build', `asoul-video-cut-v${ChromeExtensionVersion}`)
+
 var options = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
@@ -41,15 +45,13 @@ var options = {
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'modules', 'partdown', 'index.js'),
-    // devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
-    // panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
   chromeExtensionBoilerplate: {
     notHotReload: ['background', 'contentScript', 'devtools'],
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    path: CommonOutPutDir,
     clean: true,
     publicPath: ASSET_PATH,
   },
@@ -117,8 +119,8 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'src/manifest.json',
-          to: path.join(__dirname, 'build'),
+          from: `src/manifest/v${ChromeExtensionVersion}/manifest.json`,
+          to: CommonOutPutDir,
           force: true,
           transform: function (content, path) {
             // generates the manifest file using the package.json informations
@@ -142,24 +144,17 @@ var options = {
     //     },
     //   ],
     // }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'src/assets/img/icon-128.png',
-          to: path.join(__dirname, 'build'),
-          force: true,
-        },
-      ],
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'src/assets/img/icon-34.png',
-          to: path.join(__dirname, 'build'),
-          force: true,
-        },
-      ],
-    }),
+    ...(ChromeExtensionVersion === 3 ?
+      ['34', '128'] : ['16', '48', '128']).map(size => new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: `src/assets/img/icon-${size}.png`,
+            to: CommonOutPutDir,
+            force: true,
+          },
+        ],
+      })
+      ),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -168,12 +163,6 @@ var options = {
         },
       ]
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.html'),
-    //   filename: 'newtab.html',
-    //   chunks: ['newtab'],
-    //   cache: false,
-    // }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
       filename: 'options.html',
@@ -186,20 +175,11 @@ var options = {
       chunks: ['popup'],
       cache: false,
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.html'),
-    //   filename: 'devtools.html',
-    //   chunks: ['devtools'],
-    //   cache: false,
-    // }),
-    // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, 'src', 'pages', 'Panel', 'index.html'),
-    //   filename: 'panel.html',
-    //   chunks: ['panel'],
-    //   cache: false,
-    // }),
-
-
+    new webpack.DefinePlugin({
+      'process.env': {
+        ChromeExtensionVersion: process.env.ChromeExtensionVersion // 将属性转化为全局变量，让代码中可以正常访问
+      }
+    })
   ],
   infrastructureLogging: {
     level: 'info',

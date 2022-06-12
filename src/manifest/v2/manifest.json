@@ -1,0 +1,40 @@
+{
+  "manifest_version": 2,
+  "name": "A-SOUL-Video-Cut",
+  "version": "1.1.0",
+  "description": "切片王来咯🥵🥵🥵，具备b站部分视频的截取下载能力。比你们更喜欢晚晚，向晚是我老婆！",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": "icon-48.png",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://www.bilibili.com/video/*",
+        "https://www.bilibili.com/video/*"
+      ],
+      "js": [
+        "public/vendor/ffmpeg.min.js",
+        "public/vendor/ffmpeg-core.js",
+        "contentScript.bundle.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    "contentScript.bundle.js",
+    "public/*",
+    "icon-128.png",
+    "icon-48.png",
+    "icon-16.png"
+  ]
+}

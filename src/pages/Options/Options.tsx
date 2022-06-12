@@ -10,7 +10,7 @@ interface Props {
 const Options: React.FC<Props> = ({ title }: Props) => {
   return (
     <div className="OptionsContainer">
-      <div style={{ width: 950, marginLeft: -56 }}>
+      <div style={{ width: 950, marginLeft: -56, height: '100%' }}>
         <ConfigForm type="options" />
       </div>
     </div>

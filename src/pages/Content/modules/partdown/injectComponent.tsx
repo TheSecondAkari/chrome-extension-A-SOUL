@@ -17,18 +17,14 @@ import FLV from './utils/flvparser/flv';
 // import FLVTags from './utils/flvparser/flv-tags';
 // import { OriginIcon } from '../../../../components/OriginIcon';
 import { downFileToLocal, formatTime } from './utils/common';
+import {
+  defaultErrMsg,
+  icon_jellyfish,
+  primaryColor,
+  q_img_ava,
+  spaceBetweenStyle,
+} from './config';
 import '@arco-design/web-react/dist/css/arco.css';
-
-const spaceBetweenStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
-
-const primaryColor = '#b4ade6';
-
-const icon_jellyfish = chrome.runtime.getURL('./public/水母.png');
-const q_img_ava = chrome.runtime.getURL('./public/ava.png');
 
 // ! 不再手动处理flv的Tag信息，采用ffmpeg去处理
 // duration 时长，毫秒
@@ -190,9 +186,6 @@ const InjectComponent = (props: {
     }
   };
 
-  const defaultErrMsg =
-    '下载片段完整性受损, 请稍等10-15分钟左右再刷新页面重试(原因：可能视频接口不稳定）\n期间可尝试前往其他页面下载视频不冲突';
-
   // 预解析，是否支持索引特定起点、终点
   useEffect(() => {
     preHandle(streamUrl);
@@ -227,6 +220,7 @@ const InjectComponent = (props: {
       setEncoding(false);
       setErrMsg('');
     } catch (e) {
+      console.log(e);
       setErrMsg(defaultErrMsg);
       setEncoding(false);
       setVisible(true);
@@ -261,6 +255,7 @@ const InjectComponent = (props: {
       setEncoding(false);
       setErrMsg('');
     } catch (e) {
+      console.log(e);
       setErrMsg(defaultErrMsg);
       setEncoding(false);
       setVisible(true);
