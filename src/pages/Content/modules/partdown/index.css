@@ -22,12 +22,19 @@
   box-shadow: 0 0 4px 4px rgb(153 151 151 / 68%);
 }
 
-.download-trigger-button:hover {
+.download-trigger-button:hover,
+.download-trigger-button:active {
   background: #b4ade6 !important;
 }
 
-.download-trigger-button:active {
-  background: #b4ade6 !important;
+.text-button {
+  color: #8d81da;
+  cursor: pointer;
+}
+
+.text-button:hover,
+.text-button:active {
+  color: #b4ade6;
 }
 
 @keyframes bounce-down {

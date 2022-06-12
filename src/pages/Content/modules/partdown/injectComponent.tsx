@@ -18,7 +18,7 @@ import FLV from './utils/flvparser/flv';
 // import { OriginIcon } from '../../../../components/OriginIcon';
 import { downFileToLocal, formatTime } from './utils/common';
 import {
-  defaultErrMsg,
+  judgeErrMsg,
   icon_jellyfish,
   primaryColor,
   q_img_ava,
@@ -36,6 +36,7 @@ const InjectComponent = (props: {
   const { streamUrl, duration, videoTitle } = props;
   const [visible, setVisible] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const [errOriginMsg, setErrOriginMsg] = useState('');
   const [process, setProcess] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [enableEncode, setEnableEncode] = useState(true);
@@ -189,6 +190,8 @@ const InjectComponent = (props: {
   // 预解析，是否支持索引特定起点、终点
   useEffect(() => {
     preHandle(streamUrl);
+    setErrMsg('');
+    setErrOriginMsg('');
   }, [streamUrl]);
 
   // 编码视频
@@ -219,9 +222,12 @@ const InjectComponent = (props: {
       downFileToLocal(validateFileName + '.mp4', file);
       setEncoding(false);
       setErrMsg('');
-    } catch (e) {
+      setErrOriginMsg('');
+    } catch (e: any) {
       console.log(e);
-      setErrMsg(defaultErrMsg);
+      const originMsg = e?.toString() || `${e}`;
+      setErrOriginMsg(originMsg);
+      setErrMsg(judgeErrMsg(originMsg));
       setEncoding(false);
       setVisible(true);
     }
@@ -254,9 +260,12 @@ const InjectComponent = (props: {
       downFileToLocal(validateFileName + '.flv', file);
       setEncoding(false);
       setErrMsg('');
-    } catch (e) {
+      setErrOriginMsg('');
+    } catch (e: any) {
       console.log(e);
-      setErrMsg(defaultErrMsg);
+      const originMsg = e?.toString() || `${e}`;
+      setErrOriginMsg(originMsg);
+      setErrMsg(judgeErrMsg(originMsg));
       setEncoding(false);
       setVisible(true);
     }
@@ -421,9 +430,36 @@ const InjectComponent = (props: {
                     }}
                   >
                     {errMsg}
+                    <Tooltip
+                      content={
+                        <div style={{ whiteSpace: 'pre-wrap' }}>
+                          {errOriginMsg}
+                        </div>
+                      }
+                    >
+                      <IconQuestionCircle
+                        style={{ color: 'red', marginLeft: 6 }}
+                      />
+                    </Tooltip>
+                    <Tooltip content={'可尝试点击，有概率可以解决问题'}>
+                      <span
+                        onClick={() => {
+                          chrome.runtime.sendMessage(
+                            { type: 'reload' },
+                            (res) => {
+                              res === 'reload-done' &&
+                                setTimeout(() => window.location.reload(), 612);
+                            }
+                          );
+                        }}
+                        className="text-button"
+                        style={{ marginLeft: 6 }}
+                      >
+                        重新加载插件
+                      </span>
+                    </Tooltip>
                   </div>
                 ) : null}
-
                 {downloading ? (
                   <div>
                     下载进度：

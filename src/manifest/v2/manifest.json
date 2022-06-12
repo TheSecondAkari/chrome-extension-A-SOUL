@@ -16,6 +16,10 @@
     "page": "options.html"
   },
   "permissions": ["storage"],
+  "background": {
+    "scripts": ["background.bundle.js"],
+    "persistent": true
+  },
   "content_scripts": [
     {
       "matches": [
@@ -31,6 +35,7 @@
     }
   ],
   "web_accessible_resources": [
+    "background.bundle.js",
     "contentScript.bundle.js",
     "public/*",
     "icon-128.png",
