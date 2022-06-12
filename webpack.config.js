@@ -163,6 +163,14 @@ var options = {
         },
       ]
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: '使用阅读注意事项.txt',
+          to: '使用阅读注意事项.txt'
+        },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
       filename: 'options.html',
