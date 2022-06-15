@@ -23,6 +23,7 @@ import {
   primaryColor,
   q_img_ava,
   spaceBetweenStyle,
+  ReloadTrigger,
 } from './config';
 import '@arco-design/web-react/dist/css/arco.css';
 
@@ -35,6 +36,7 @@ const InjectComponent = (props: {
 }) => {
   const { streamUrl, duration, videoTitle } = props;
   const [visible, setVisible] = useState(false);
+  const [hasSharedArrayBuffer, setHasSharedArrayBuffer] = useState(false);
   const [errMsg, setErrMsg] = useState('');
   const [errOriginMsg, setErrOriginMsg] = useState('');
   const [process, setProcess] = useState(0);
@@ -306,6 +308,7 @@ const InjectComponent = (props: {
             loading: downloading,
             style: { borderRadius: 12 },
             disabled:
+              !hasSharedArrayBuffer ||
               timeRange[0] === undefined ||
               timeRange[1] === undefined ||
               timeRange[1] <= timeRange[0],
@@ -420,7 +423,7 @@ const InjectComponent = (props: {
                     </Tooltip>
                   </Checkbox>
                 </div>
-                {errMsg ? (
+                {errMsg || !hasSharedArrayBuffer ? (
                   <div
                     style={{
                       marginTop: 8,
@@ -429,35 +432,23 @@ const InjectComponent = (props: {
                       whiteSpace: 'pre-wrap',
                     }}
                   >
-                    {errMsg}
-                    <Tooltip
-                      content={
-                        <div style={{ whiteSpace: 'pre-wrap' }}>
-                          {errOriginMsg}
-                        </div>
-                      }
-                    >
-                      <IconQuestionCircle
-                        style={{ color: 'red', marginLeft: 6 }}
-                      />
-                    </Tooltip>
-                    <Tooltip content={'可尝试点击，有概率可以解决问题'}>
-                      <span
-                        onClick={() => {
-                          chrome.runtime.sendMessage(
-                            { type: 'reload' },
-                            (res) => {
-                              res === 'reload-done' &&
-                                setTimeout(() => window.location.reload(), 612);
-                            }
-                          );
-                        }}
-                        className="text-button"
-                        style={{ marginLeft: 6 }}
+                    {!hasSharedArrayBuffer
+                      ? '当前页面不支持截取视频处理: 可尝试 能否下载其他视频(打开新页面) 或'
+                      : errMsg}
+                    {hasSharedArrayBuffer ? (
+                      <Tooltip
+                        content={
+                          <div style={{ whiteSpace: 'pre-wrap' }}>
+                            {errOriginMsg}
+                          </div>
+                        }
                       >
-                        重新加载插件
-                      </span>
-                    </Tooltip>
+                        <IconQuestionCircle
+                          style={{ color: 'red', marginLeft: 6 }}
+                        />
+                      </Tooltip>
+                    ) : null}
+                    {ReloadTrigger}
                   </div>
                 ) : null}
                 {downloading ? (
@@ -505,6 +496,9 @@ const InjectComponent = (props: {
             }}
             onClick={() => {
               setVisible(!visible);
+              if (!visible) {
+                setHasSharedArrayBuffer(Boolean(window.SharedArrayBuffer));
+              }
             }}
             shape="circle"
             type="primary"
