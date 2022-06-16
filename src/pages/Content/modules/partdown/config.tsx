@@ -16,7 +16,7 @@ export const extensionGetURL =
   ChromeExtensionVersion === 3
     ? chrome.runtime.getURL
     : chrome.runtime.getURL || chrome.extension.getURL;
-export const icon_jellyfish = extensionGetURL('./public/水母.png');
+export const icon_jellyfish = extensionGetURL('./public/jellyfish.png');
 export const q_img_ava = extensionGetURL('./public/ava.png');
 
 const ErrMsgs: { match: RegExp; msg: string }[] = [
