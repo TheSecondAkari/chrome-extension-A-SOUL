@@ -39,10 +39,16 @@ export const ReloadTrigger = (
   <Tooltip content={'点击有概率解决问题(若多次尝试仍失败，可稍等数分钟再重试)'}>
     <span
       onClick={() => {
-        chrome.runtime.sendMessage({ type: 'reload' }, (res) => {
-          res === 'reload-done' &&
-            setTimeout(() => window.location.reload(), 612);
-        });
+        try {
+          chrome.runtime.sendMessage({ type: 'reload' }, (res) => {
+            res === 'reload-done' &&
+              setTimeout(() => window.location.reload(), 612);
+          });
+        } catch (e: any) {
+          if (/Extension context invalidated/.test(e?.toString?.() || `${e}`)) {
+            window.location.reload();
+          }
+        }
       }}
       className="text-button"
       style={{ marginLeft: 6 }}

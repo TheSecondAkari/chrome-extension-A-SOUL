@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "A-SOUL-Video-Cut",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "切片王来咯🥵🥵🥵，具备b站部分视频的截取下载能力。比你们更喜欢晚晚，向晚是我老婆！",
   "icons": {
     "16": "icon-16.png",
@@ -15,6 +15,7 @@
   "options_ui": {
     "page": "options.html"
   },
+  "content_security_policy": "script-src 'self' ; object-src 'self'",
   "permissions": ["storage"],
   "background": {
     "scripts": ["background.bundle.js"],
@@ -31,7 +32,7 @@
         "public/vendor/ffmpeg-core.js",
         "contentScript.bundle.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
