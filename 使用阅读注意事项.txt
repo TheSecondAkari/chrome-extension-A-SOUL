@@ -1,15 +1,29 @@
-使用本插件要求：
-如果你是A-SOUL的粉丝，请保持对五个女孩的爱
-如果你是路人，没要求
+浏览器：
+    插件目前只适配两个浏览器：Edge，Chrome
 
-最后，如果能在你的视频简介适当帮忙宣传一下，不胜感激(不注明也没事)
-标明：【素材获取工具：BV1WU4y1S7Wv】
-希望可以有更多的人使用，提升大家做视频的效率
+画质：
+    1. 插件默认支持下载b站视频的最高画质，不可调整。最高支持4K画质的下载
+    2. 下载高画质的视频，需要b站页面登录账号。 
+    3. 当账号拥有b站大会员才能下载1080+的画质（跟b站本身的限制有关）
 
-百度云盘：
-链接：https://pan.baidu.com/s/1y0XBxKvdDDsA7Pd3YxdDJg?pwd=soul 
-提取码：soul
-安装方式：https://jingyan.baidu.com/article/ab0b56309653bb805afa7de4.html
+安装：
+    Edge： 
+        1. 在线官方商店安装 https://microsoftedge.microsoft.com/addons/detail/asoulvideocut/effcohebnfgnfbgagahbalkdjpgdgeoh
+        2. 本地安装 （和chrome的方式类似）
+    Chrome：
+        1. 在线官方商店，因为国内要翻墙才能用，我没上传到商店
+        2. 本地安装
+            a: 百度云盘：链接：https://pan.baidu.com/s/1y0XBxKvdDDsA7Pd3YxdDJg?pwd=soul 
+            b: 安装方式：https://jingyan.baidu.com/article/ab0b56309653bb805afa7de4.html
+
+帮助我一下：
+    如果能在你的视频简介适当帮忙宣传一下，不胜感激(不注明也没事)
+    标明：【获取视频素材工具 或者 @我 过去看一下，你做了什么作品】
+    希望可以有更多的人使用，提升大家做视频的效率
+
+要求：
+    如果你是A-SOUL的粉丝，请保持对五个女孩的爱
+    如果你是路人，没要求
 
 注意：
-请不要使用本插件做一些盗视频之类的违法行为，最后祝大家每天开开心心
+    请不要使用本插件做一些盗视频之类的违法行为，最后祝大家每天开开心心
