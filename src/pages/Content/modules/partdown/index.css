@@ -5,38 +5,6 @@
   z-index: 1000;
 }
 
-.demo-trigger-popup {
-  box-shadow: 0 0 4px 4px gray;
-}
-
-.demo-trigger-icon-click {
-  cursor: pointer;
-}
-
-.demo-trigger-icon-click:hover {
-  color: blue;
-}
-
-.download-trigger-button {
-  background: #8d81da !important;
-  box-shadow: 0 0 4px 4px rgb(153 151 151 / 68%);
-}
-
-.download-trigger-button:hover,
-.download-trigger-button:active {
-  background: #b4ade6 !important;
-}
-
-.text-button {
-  color: #8d81da;
-  cursor: pointer;
-}
-
-.text-button:hover,
-.text-button:active {
-  color: #b4ade6;
-}
-
 @keyframes bounce-down {
   25% {
     transform: translateY(-4px);
@@ -50,4 +18,65 @@
   75% {
     transform: translateY(4px);
   }
+}
+
+#handle-video-download .normal-shadow {
+  box-shadow: 0 0 4px 4px rgb(153 151 151 / 68%);
+}
+
+/* 向晚主题 */
+.ava-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #8d81da !important;
+}
+
+.ava-button {
+  background: #8d81da !important;
+}
+
+.ava-button:hover,
+.ava-button:active {
+  background: #b4ade6 !important;
+}
+
+.ava-button.arco-btn-disabled {
+  background: #cac2fe !important;
+}
+
+.ava-button.arco-btn-disabled:hover,
+.ava-button.arco-btn-disabled:active {
+  background: #cac2fe !important;
+}
+
+.text-button {
+  color: #8d81da;
+  cursor: pointer;
+}
+
+.text-button:hover,
+.text-button:active {
+  color: #b4ade6;
+}
+
+
+/* 贝拉主题 */
+.bella-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #DB7D74 !important;
+}
+
+.bella-button {
+  background: #DB7D74 !important;
+}
+
+.bella-button:hover,
+.bella-button:active {
+  background: #f3a29a !important;
+}
+
+.bella-button.arco-btn-disabled {
+  background: #ffcfcb !important;
+}
+
+.bella-button.arco-btn-disabled:hover,
+.bella-button.arco-btn-disabled:active {
+  background: #ffcfcb !important;
 }

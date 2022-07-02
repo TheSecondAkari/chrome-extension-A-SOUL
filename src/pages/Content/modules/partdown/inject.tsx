@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-globals */
 import React, { useEffect, useState } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
-import InjectComponent from './injectComponent';
+import { ThemeConfig } from './config';
+import DownloadVideo from './DownloadVideo';
 import './index.css';
 
 // 获取url中全部参数的对象
@@ -19,7 +20,13 @@ function getUrlAllParams() {
   return res;
 }
 
+// 获取数组中随机一个
+function getRandom(arr: any[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 const InjectApp = () => {
+  const [themeKey, setThemeKey] = useState('ava');
   const [pageList, setPageList] = useState<any[]>([]);
   const [pNum, setPNum] = useState(0);
   const [stream, setStream] = useState<any>({});
@@ -77,13 +84,19 @@ const InjectApp = () => {
     return apiJson.data || apiJson.result;
   };
 
+  console.log('触发渲染');
+
   return (
     <div>
       {/flv/.test(stream?.format || '') && stream?.durl?.[0]?.url ? (
-        <InjectComponent
+        <DownloadVideo
           videoTitle={videoTitle}
           streamUrl={stream.durl[0].url}
           duration={stream.timelength}
+          theme={{
+            ...(ThemeConfig[themeKey] || {}),
+            QIcon: getRandom(ThemeConfig[themeKey].QIcon),
+          }}
         />
       ) : null}
     </div>

@@ -47,32 +47,3 @@ export const getAsoulImgsNum = async (
   const imgs = await getAsoulImgs();
   return getRandomArray(imgs, num > 20 ? 20 : num);
 };
-
-// 发送给所有页面
-// export function sendMessageToContentScript(
-//   message: any,
-//   active?: boolean,
-//   callback?: (value?: any) => void
-// ) {
-//   chrome.tabs.query({ active, currentWindow: true }, function (tabs = []) {
-//     tabs.map((tab) => {
-//       if (tab?.id) {
-//         chrome.tabs.sendMessage(tab.id, message, function (response) {
-//           if (callback) callback(response);
-//         });
-//       }
-//     });
-//   });
-// }
-
-// export const matchFilesFromStr = (text: string) => {
-//   const content = text.replace(/<!DOCTYPE html>[\S\s]*<\/html>/g, '');
-//   const rows = content.match(/<script>addRow.*<\/script>/g) || [];
-//   const dirList = rows.map((row) =>
-//     row
-//       .replace(/<script>addRow|"|<\/script>|\(|\)/g, '')
-//       .split(',')
-//       .slice(1, 3)
-//   );
-//   return dirList;
-// };

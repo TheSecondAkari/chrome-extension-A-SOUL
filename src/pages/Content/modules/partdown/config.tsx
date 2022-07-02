@@ -6,8 +6,6 @@ export const spaceBetweenStyle = {
   justifyContent: 'space-between',
 };
 
-export const primaryColor = '#b4ade6';
-
 export const ChromeExtensionVersion = Number(
   process.env.ChromeExtensionVersion || '3'
 ); // 若没设置，默认使用 3 版本
@@ -16,8 +14,8 @@ export const extensionGetURL =
   ChromeExtensionVersion === 3
     ? chrome.runtime.getURL
     : chrome.runtime.getURL || chrome.extension.getURL;
-export const icon_jellyfish = extensionGetURL('./public/jellyfish.png');
-export const q_img_ava = extensionGetURL('./public/ava.png');
+export const icon_jellyfish = extensionGetURL('./public/assets/jellyfish.png');
+export const q_img_ava = extensionGetURL('./public/assets/ava.png');
 
 const ErrMsgs: { match: RegExp; msg: string }[] = [
   //   {
@@ -57,3 +55,59 @@ export const ReloadTrigger = (
     </span>
   </Tooltip>
 );
+
+export const ThemeConfig = {
+  ava: {
+    key: 'ava',
+    primaryColor: '#8d81da',
+    SecondaryColor: '#b4ade6',
+    fanIcon: extensionGetURL('./public/assets/jellyfish.png'),
+    QIcon: [
+      {
+        src: extensionGetURL('./public/assets/ava.png'),
+        style: {
+          position: 'absolute',
+          width: 300,
+          bottom: -17,
+          right: -25,
+        },
+      },
+    ],
+  },
+  bella: {
+    key: 'bella',
+    primaryColor: '#DB7D74',
+    SecondaryColor: '#f3a29a',
+    fanIcon: extensionGetURL('./public/assets/beijixing.png'),
+    QIcon: [
+      {
+        src: extensionGetURL('./public/assets/bella_q1.png'),
+        style: {
+          position: 'absolute',
+          width: 275,
+          bottom: -20,
+          right: 0,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/bella_q2.png'),
+        style: {
+          position: 'absolute',
+          width: 250,
+          bottom: -20,
+          right: 0,
+        },
+      },
+    ],
+  },
+};
+
+// export const themeColorMap = {
+//   ava: '#9ac8e2',
+//   bella: '#DB7D74',
+//   carol: '#B8A6D9',
+//   diana: '#E799B0',
+//   eileen: '#576690',
+//   acao: '#b3b4a6', // 暂定随机调的一个
+//   unknow: '#ada6a7',
+// };

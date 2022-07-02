@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from '@arco-design/web-react';
 import { IconQuestionCircle } from '@arco-design/web-react/icon';
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import DetailedFetchBlob from './utils/detailed-fetch-blob';
 import FLVMetaData from './utils/flvparser/flv-metadata';
 import TwentyFourDataView from './utils/twenty-four-dataview';
@@ -17,24 +17,27 @@ import FLV from './utils/flvparser/flv';
 // import FLVTags from './utils/flvparser/flv-tags';
 // import { OriginIcon } from '../../../../components/OriginIcon';
 import { downFileToLocal, formatTime } from './utils/common';
-import {
-  judgeErrMsg,
-  icon_jellyfish,
-  primaryColor,
-  q_img_ava,
-  spaceBetweenStyle,
-  ReloadTrigger,
-} from './config';
+import { judgeErrMsg, spaceBetweenStyle, ReloadTrigger } from './config';
 import '@arco-design/web-react/dist/css/arco.css';
 
 // ! 不再手动处理flv的Tag信息，采用ffmpeg去处理
 // duration 时长，毫秒
-const InjectComponent = (props: {
+const DownloadVideo = (props: {
   streamUrl: string;
   duration: number;
   videoTitle?: string;
+  theme: {
+    key: string;
+    primaryColor: string;
+    SecondaryColor: string;
+    fanIcon: string;
+    QIcon: {
+      src: string;
+      style: CSSProperties;
+    };
+  };
 }) => {
-  const { streamUrl, duration, videoTitle } = props;
+  const { streamUrl, duration, videoTitle, theme } = props;
   const [visible, setVisible] = useState(false);
   const [hasSharedArrayBuffer, setHasSharedArrayBuffer] = useState(false);
   const [errMsg, setErrMsg] = useState('');
@@ -196,7 +199,7 @@ const InjectComponent = (props: {
     setErrOriginMsg('');
   }, [streamUrl]);
 
-  // 编码视频
+  // 编码视频mp4
   const encodeVideoMP4 = async (blob: Blob) => {
     setEncoding(true);
     try {
@@ -235,6 +238,7 @@ const InjectComponent = (props: {
     }
   };
 
+  // 编码视频flv
   const encodeVideoFlv = async (blob: Blob) => {
     setEncoding(true);
     try {
@@ -306,6 +310,7 @@ const InjectComponent = (props: {
           }}
           okButtonProps={{
             loading: downloading,
+            className: `${theme?.key}-button`,
             style: { borderRadius: 12 },
             disabled:
               !hasSharedArrayBuffer ||
@@ -322,7 +327,7 @@ const InjectComponent = (props: {
               <div
                 style={{
                   ...spaceBetweenStyle,
-                  background: primaryColor,
+                  background: theme?.primaryColor,
                   padding: '10px 16px 8px',
                   fontSize: '16px',
                   fontWeight: 600,
@@ -340,14 +345,9 @@ const InjectComponent = (props: {
                 </div>
 
                 <img
-                  src={q_img_ava}
-                  alt="ava"
-                  style={{
-                    position: 'absolute',
-                    width: 300,
-                    bottom: -17,
-                    right: -25,
-                  }}
+                  src={theme?.QIcon.src}
+                  alt={theme?.key}
+                  style={theme?.QIcon.style}
                 />
               </div>
               <div style={{ padding: '10px 16px' }}>
@@ -413,6 +413,7 @@ const InjectComponent = (props: {
                   </div>
 
                   <Checkbox
+                    className={`${theme?.key}-checkbox`}
                     checked={enableEncode}
                     disabled={downloading}
                     onChange={(v) => setEnableEncode(v)}
@@ -482,12 +483,12 @@ const InjectComponent = (props: {
               size="large"
               type="circle"
               percent={encoding ? encodeProcess : process}
-              color={encoding ? primaryColor : '#8d81da'}
+              color={encoding ? theme?.SecondaryColor : theme?.primaryColor}
             />
           ) : null}
 
           <Button
-            className="download-trigger-button"
+            className={`${theme?.key}-button normal-shadow`}
             style={{
               ...spaceBetweenStyle,
               justifyContent: 'center',
@@ -504,8 +505,8 @@ const InjectComponent = (props: {
             type="primary"
             icon={
               <img
-                alt="jellyfish"
-                src={icon_jellyfish}
+                alt="fanIcon"
+                src={theme?.fanIcon}
                 style={{
                   height: 42,
                   animation: 'bounce-down 1.6s linear infinite',
@@ -519,7 +520,7 @@ const InjectComponent = (props: {
   );
 };
 
-export default InjectComponent;
+export default DownloadVideo;
 
 const TimestampSelect = (props: any) => {
   const { value, onChange, options, placeholder, disabled } = props;
