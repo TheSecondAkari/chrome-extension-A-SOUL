@@ -17,7 +17,7 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self';object-src 'self'"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "*://www.bilibili.com/video/*", "webRequest"],
   "content_scripts": [
     {
       "matches": [

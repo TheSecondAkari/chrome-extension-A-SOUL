@@ -13,12 +13,9 @@
   },
   "dependencies": {
     "@arco-design/web-react": "^2.32.0",
-    "@hot-loader/react-dom": "^17.0.2",
     "axios": "^0.26.1",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "cross-env": "^7.0.3",
     "react": "^17.0.2",
-    "react-dock": "^0.5.1",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0"
   },
@@ -27,6 +24,7 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@hot-loader/react-dom": "^17.0.2",
     "@types/chrome": "^0.0.177",
     "@types/ifvisible": "^1.1.0",
     "@types/react": "^17.0.39",
@@ -36,6 +34,7 @@
     "babel-preset-react-app": "^10.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^7.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.6.0",
     "eslint": "^8.8.0",
     "eslint-config-react-app": "^7.0.0",
