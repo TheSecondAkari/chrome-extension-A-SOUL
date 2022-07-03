@@ -369,7 +369,13 @@ const DownloadVideo = (props: {
                     <TimestampSelect
                       placeholder="结束时间"
                       disabled={downloading}
-                      options={timestampOptions}
+                      options={
+                        timeRange[0]
+                          ? timestampOptions.filter(
+                              (item) => item.value > timeRange[0]
+                            )
+                          : timestampOptions
+                      }
                       value={timeRange[1]}
                       onChange={(v: number) => {
                         setTimeRange([timeRange[0], v]);
@@ -434,7 +440,7 @@ const DownloadVideo = (props: {
                     }}
                   >
                     {!hasSharedArrayBuffer
-                      ? '当前页面不支持截取视频处理: 可尝试 能否下载其他视频(打开新页面) 或'
+                      ? '不支持截取视频处理: SharedArrayBuffer 不支持。'
                       : errMsg}
                     {hasSharedArrayBuffer ? (
                       <Tooltip

@@ -1,29 +1,10 @@
 /* eslint-disable no-restricted-globals */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
-import { ThemeConfig } from './config';
+import { ThemeConfig, matchThemeKey } from './config';
 import DownloadVideo from './DownloadVideo';
+import { getRandom, getUrlAllParams } from './utils/common';
 import './index.css';
-
-// 获取url中全部参数的对象
-function getUrlAllParams() {
-  // 解决乱码问题
-  const url = decodeURI(window.location.href);
-  const res: any = {};
-  const url_data = url.split('?').length > 1 ? url.split('?')[1] : null;
-  if (!url_data) return {};
-  const params_arr = url_data.split('&');
-  params_arr.forEach(function (item) {
-    const [key, value] = item.split('=');
-    res[key] = value;
-  });
-  return res;
-}
-
-// 获取数组中随机一个
-function getRandom(arr: any[]) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 const InjectApp = () => {
   const [themeKey, setThemeKey] = useState('ava');
@@ -35,30 +16,40 @@ const InjectApp = () => {
     ?.innerText;
 
   useEffect(() => {
-    setStream({});
-    handle();
-
     const timer = setInterval(() => {
       if (pageUrl !== location.href) setPageUrl(location.href);
-    }, 1000);
+    }, 500);
+
+    setStream({});
+    handle();
+    setThemeKey(matchThemeKey(videoTitle));
 
     return () => clearInterval(timer);
   }, [pageUrl]);
 
-  const handle = async () => {
-    if (window.location.href.startsWith('https://www.bilibili.com/video')) {
-      const aid_or_bvid = window.location.pathname.split('/')[2];
-      const p = Number(getUrlAllParams()?.p || 0);
-      setPNum(p);
-      const list = await getPageList(aid_or_bvid);
-      const { cid } = list[p > 0 ? p - 1 : p];
-      const streamInfo = await getVideoStream(aid_or_bvid, cid);
-      streamInfo?.durl?.forEach((item: any) =>
-        item.url.replace('http://', 'https://')
-      );
-      setStream(streamInfo);
-    }
-  };
+  const handle = useMemo(() => {
+    let timer: any;
+    const fn = async () => {
+      if (window.location.href.startsWith('https://www.bilibili.com/video')) {
+        const aid_or_bvid = window.location.pathname.split('/')[2];
+        const p = Number(getUrlAllParams()?.p || 0);
+        setPNum(p);
+        const list = await getPageList(aid_or_bvid);
+        const { cid } = list[p > 0 ? p - 1 : p];
+        const streamInfo = await getVideoStream(aid_or_bvid, cid);
+        streamInfo?.durl?.forEach((item: any) =>
+          item.url.replace('http://', 'https://')
+        );
+        setStream(streamInfo);
+      }
+    };
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => fn(), 1520);
+    };
+  }, []);
 
   const getPageList = async (videoId: string) => {
     const params = videoId.startsWith('av') // 判断是aid 还是 bvid
@@ -83,8 +74,6 @@ const InjectApp = () => {
     const apiJson = await re.json();
     return apiJson.data || apiJson.result;
   };
-
-  console.log('触发渲染');
 
   return (
     <div>

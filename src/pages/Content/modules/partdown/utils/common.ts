@@ -33,3 +33,23 @@ export const formatTime = (rangeOne: number, needHour?: boolean) => {
         fill0((seconds % 60).toFixed(0))
     );
 };
+
+// 获取url中全部参数的对象
+export function getUrlAllParams() {
+    // 解决乱码问题
+    const url = decodeURI(window.location.href);
+    const res: any = {};
+    const url_data = url.split('?').length > 1 ? url.split('?')[1] : null;
+    if (!url_data) return {};
+    const params_arr = url_data.split('&');
+    params_arr.forEach(function (item) {
+        const [key, value] = item.split('=');
+        res[key] = value;
+    });
+    return res;
+}
+
+// 获取数组中随机一个
+export function getRandom(arr: any[]) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}

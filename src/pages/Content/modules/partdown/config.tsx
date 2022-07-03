@@ -1,4 +1,5 @@
 import { Tooltip } from '@arco-design/web-react';
+import { getRandom } from './utils/common';
 
 export const spaceBetweenStyle = {
   display: 'flex',
@@ -23,18 +24,22 @@ const ErrMsgs: { match: RegExp; msg: string }[] = [
   //     msg: '视频编码器处理数据失败，请 稍等片刻(数分钟后)再刷新重试 或 尝试下载其他视频 或 切换chrome浏览器尝试',
   //   },
 ];
+
 const defaultErrMsg =
   '下载片段完整性受损, 请稍等数分钟再刷新页面重试\n期间可尝试前往其他页面下载视频不冲突';
 
 export const judgeErrMsg = (originMsg: string) => {
   return (
-    ErrMsgs.find((item) => item.match.test(originMsg || ''))?.msg ||
-    defaultErrMsg
+    ErrMsgs.find((item) => item.match.test(originMsg || ''))?.msg || originMsg
   );
 };
 
 export const ReloadTrigger = (
-  <Tooltip content={'点击有概率解决问题(若多次尝试仍失败，可稍等数分钟再重试)'}>
+  <Tooltip
+    content={
+      '点击有概率解决问题(若多次尝试仍失败，可尝试在选项配置开启“强制支持截取”，并刷新页面重试)'
+    }
+  >
     <span
       onClick={() => {
         try {
@@ -101,6 +106,25 @@ export const ThemeConfig = {
     ],
   },
 };
+
+const RegList = [
+  {
+    reg: /向晚|晚晚/,
+    value: 'ava',
+  },
+  {
+    reg: /贝拉|拉姐/,
+    value: 'bella',
+  },
+];
+
+export function matchThemeKey(text?: string) {
+  if (text) {
+    const list: string[] = [];
+    RegList.forEach((item) => item.reg.test(text) && list.push(item.value));
+    return getRandom(list.length ? list : RegList.map((item) => item.value));
+  } else return getRandom(RegList.map((item) => item.value));
+}
 
 // export const themeColorMap = {
 //   ava: '#9ac8e2',

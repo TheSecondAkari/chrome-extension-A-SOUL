@@ -5,6 +5,16 @@
   z-index: 1000;
 }
 
+.text-button {
+  color: #8d81da;
+  cursor: pointer;
+}
+
+.text-button:hover,
+.text-button:active {
+  color: #b4ade6;
+}
+
 @keyframes bounce-down {
   25% {
     transform: translateY(-4px);
@@ -47,13 +57,13 @@
   background: #cac2fe !important;
 }
 
-.text-button {
+.ava-text-button {
   color: #8d81da;
   cursor: pointer;
 }
 
-.text-button:hover,
-.text-button:active {
+.ava-text-button:hover,
+.ava-text-button:active {
   color: #b4ade6;
 }
 
@@ -79,4 +89,14 @@
 .bella-button.arco-btn-disabled:hover,
 .bella-button.arco-btn-disabled:active {
   background: #ffcfcb !important;
+}
+
+.bella-text-button {
+  color: #DB7D74;
+  cursor: pointer;
+}
+
+.bella-text-button:hover,
+.bella-text-button:active {
+  color: #f3a29a;
 }

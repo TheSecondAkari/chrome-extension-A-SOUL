@@ -16,9 +16,17 @@
     "page": "options.html"
   },
   "content_security_policy": "script-src 'self' ; object-src 'self'",
-  "permissions": ["storage", "*://www.bilibili.com/video/*", "webRequest"],
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.bilibili.com/*",
+    "*://*.hdslb.com/*"
+  ],
   "background": {
-    "scripts": ["background.bundle.js"],
+    "scripts": [
+      "background.bundle.js"
+    ],
     "persistent": true
   },
   "content_scripts": [
