@@ -109,11 +109,11 @@ export const ThemeConfig = {
 
 const RegList = [
   {
-    reg: /向晚|晚晚/,
+    reg: /向\s*晚|晚晚|顶晚人/,
     value: 'ava',
   },
   {
-    reg: /贝拉|拉姐/,
+    reg: /贝\s*拉|拉姐|贝极星/,
     value: 'bella',
   },
 ];
