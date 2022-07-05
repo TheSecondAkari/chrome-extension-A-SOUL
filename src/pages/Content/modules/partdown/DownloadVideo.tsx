@@ -537,7 +537,7 @@ const TimestampSelect = (props: any) => {
       showSearch
       value={value}
       disabled={disabled}
-      style={{ width: 100 }}
+      style={{ width: 115 }}
       getPopupContainer={(node) => node.parentElement as any}
       onChange={onChange}
       filterOption={(inputValue, option) =>
