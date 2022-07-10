@@ -30,8 +30,13 @@
   }
 }
 
-#handle-video-download .normal-shadow {
+#handle-video-download .trigger-button {
   box-shadow: 0 0 4px 4px rgb(153 151 151 / 68%);
+  transition: all 0.5s ease;
+}
+
+#handle-video-download .trigger-button:hover {
+  transform: scale(1.2);
 }
 
 /* 向晚主题 */
@@ -99,4 +104,37 @@
 .bella-text-button:hover,
 .bella-text-button:active {
   color: #f3a29a;
+}
+
+/* 乃琳主题 */
+.eileen-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #576690 !important;
+}
+
+.eileen-button {
+  background: #576690 !important;
+}
+
+.eileen-button:hover,
+.eileen-button:active {
+  background: #7687b7 !important;
+}
+
+.eileen-button.arco-btn-disabled {
+  background: #92a4d3 !important;
+}
+
+.eileen-button.arco-btn-disabled:hover,
+.eileen-button.arco-btn-disabled:active {
+  background: #92a4d3 !important;
+}
+
+.eileen-text-button {
+  color: #576690;
+  cursor: pointer;
+}
+
+.eileen-text-button:hover,
+.eileen-text-button:active {
+  color: #7687b7;
 }

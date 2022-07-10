@@ -461,13 +461,16 @@ const DownloadVideo = (props: {
                 {downloading ? (
                   <div>
                     下载进度：
-                    <Progress percent={process} />
+                    <Progress percent={process} color={theme?.primaryColor} />
                   </div>
                 ) : null}
                 {encoding ? (
                   <div>
                     编译进度：
-                    <Progress percent={encodeProcess} />
+                    <Progress
+                      percent={encodeProcess}
+                      color={theme?.SecondaryColor}
+                    />
                   </div>
                 ) : null}
               </div>
@@ -494,7 +497,7 @@ const DownloadVideo = (props: {
           ) : null}
 
           <Button
-            className={`${theme?.key}-button normal-shadow`}
+            className={`${theme?.key}-button trigger-button`}
             style={{
               ...spaceBetweenStyle,
               justifyContent: 'center',

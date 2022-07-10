@@ -105,6 +105,32 @@ export const ThemeConfig = {
       },
     ],
   },
+  eileen: {
+    key: 'eileen',
+    primaryColor: '#576690',
+    SecondaryColor: '#7687b7',
+    fanIcon: extensionGetURL('./public/assets/naiqilin.png'),
+    QIcon: [
+      {
+        src: extensionGetURL('./public/assets/eileen1.png'),
+        style: {
+          position: 'absolute',
+          width: 320,
+          bottom: -20,
+          right: -20,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/eileen_bella.png'),
+        style: {
+          position: 'absolute',
+          width: 350,
+          bottom: -6,
+          right: -30,
+        },
+      },
+    ],
+  },
 };
 
 const RegList = [
@@ -115,6 +141,10 @@ const RegList = [
   {
     reg: /贝\s*拉|拉姐|贝极星/,
     value: 'bella',
+  },
+  {
+    reg: /乃\s*琳|乃宝|([乃奶]淇琳)/,
+    value: 'eileen',
   },
 ];
 
