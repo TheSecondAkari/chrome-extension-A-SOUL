@@ -1,13 +1,13 @@
-// ! 不建议使用v2， 这里的 requset 监听范围没有收敛
+// ! 不建议使用chrome 插件 v2版本， 这里的 requset 监听范围没有收敛
 
 // 监听的回调
 const callback = function (
   details: chrome.webRequest.WebResponseHeadersDetails
 ) {
   const headers = details.responseHeaders;
-  console.log(
-    details.url === 'https://message.bilibili.com/pages/nav/header_sync'
-  );
+  // console.log(
+  //   details.url === 'https://message.bilibili.com/pages/nav/header_sync'
+  // );
   if (headers) {
     if (
       details.method === 'GET' &&
