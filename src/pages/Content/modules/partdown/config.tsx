@@ -25,8 +25,8 @@ const ErrMsgs: { match: RegExp; msg: string }[] = [
   //   },
 ];
 
-const defaultErrMsg =
-  '下载片段完整性受损, 请稍等数分钟再刷新页面重试\n期间可尝试前往其他页面下载视频不冲突';
+// const defaultErrMsg =
+//   '下载片段完整性受损, 请稍等数分钟再刷新页面重试\n期间可尝试前往其他页面下载视频不冲突';
 
 export const judgeErrMsg = (originMsg: string) => {
   return (
@@ -64,12 +64,14 @@ export const ReloadTrigger = (
 export const ThemeConfig = {
   ava: {
     key: 'ava',
+    label: '向晚',
     primaryColor: '#8d81da',
     SecondaryColor: '#b4ade6',
     fanIcon: extensionGetURL('./public/assets/jellyfish.png'),
     QIcon: [
       {
-        src: extensionGetURL('./public/assets/ava.png'),
+        key: 'ava_0',
+        src: extensionGetURL('./public/assets/ava_0.png'),
         style: {
           position: 'absolute',
           width: 300,
@@ -78,15 +80,19 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'ava_1',
         src: extensionGetURL('./public/assets/ava_1.png'),
         style: {
           position: 'absolute',
-          width: 170,
-          bottom: -25,
-          right: 25,
+          width: 420,
+          bottom: -4,
+          right: -40,
+          clipPath:
+            'polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% 98.5%, 29% 98.5%, 22% 100%, 0 100%)',
         },
       },
       {
+        key: 'ava_2',
         src: extensionGetURL('./public/assets/ava_2.png'),
         style: {
           position: 'absolute',
@@ -97,26 +103,27 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'ava_3',
         src: extensionGetURL('./public/assets/ava_3.png'),
         style: {
           position: 'absolute',
-          width: 420,
-          bottom: -4,
-          right: -40,
-          clipPath:
-            'polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% 98.5%, 29% 98.5%, 22% 100%, 0 100%)',
+          width: 170,
+          bottom: -25,
+          right: 25,
         },
       },
     ],
   },
   bella: {
     key: 'bella',
+    label: '贝拉',
     primaryColor: '#DB7D74',
     SecondaryColor: '#f3a29a',
     fanIcon: extensionGetURL('./public/assets/beijixing.png'),
     QIcon: [
       {
-        src: extensionGetURL('./public/assets/bella_q1.png'),
+        key: 'bella_1',
+        src: extensionGetURL('./public/assets/bella_1.png'),
         style: {
           position: 'absolute',
           width: 275,
@@ -125,7 +132,8 @@ export const ThemeConfig = {
         },
       },
       {
-        src: extensionGetURL('./public/assets/bella_q2.png'),
+        key: 'bella_2',
+        src: extensionGetURL('./public/assets/bella_2.png'),
         style: {
           position: 'absolute',
           width: 250,
@@ -137,11 +145,13 @@ export const ThemeConfig = {
   },
   carol: {
     key: 'carol',
+    label: '珈乐',
     primaryColor: '#8d81da',
     SecondaryColor: '#B8A6D9',
     fanIcon: extensionGetURL('./public/assets/knight.png'),
     QIcon: [
       {
+        key: 'carol_1',
         src: extensionGetURL('./public/assets/carol_1.png'),
         style: {
           position: 'absolute',
@@ -151,6 +161,7 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'carol_2',
         src: extensionGetURL('./public/assets/carol_2.png'),
         style: {
           position: 'absolute',
@@ -160,6 +171,7 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'carol_3',
         src: extensionGetURL('./public/assets/carol_3.png'),
         style: {
           position: 'absolute',
@@ -172,11 +184,13 @@ export const ThemeConfig = {
   },
   diana: {
     key: 'diana',
+    label: '嘉然',
     primaryColor: '#E799B0',
     SecondaryColor: '#e4bbc7',
     fanIcon: extensionGetURL('./public/assets/jiaxintang.png'),
     QIcon: [
       {
+        key: 'diana_1',
         src: extensionGetURL('./public/assets/diana_1.png'),
         style: {
           position: 'absolute',
@@ -186,6 +200,7 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'diana_2',
         src: extensionGetURL('./public/assets/diana_2.png'),
         style: {
           position: 'absolute',
@@ -195,6 +210,7 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'diana_3',
         src: extensionGetURL('./public/assets/diana_3.gif'),
         style: {
           position: 'absolute',
@@ -204,6 +220,7 @@ export const ThemeConfig = {
         },
       },
       {
+        key: 'diana_4',
         src: extensionGetURL('./public/assets/diana_4.png'),
         style: {
           position: 'absolute',
@@ -216,12 +233,14 @@ export const ThemeConfig = {
   },
   eileen: {
     key: 'eileen',
+    label: '乃琳',
     primaryColor: '#576690',
     SecondaryColor: '#7687b7',
     fanIcon: extensionGetURL('./public/assets/naiqilin.png'),
     QIcon: [
       {
-        src: extensionGetURL('./public/assets/eileen1.png'),
+        key: 'eileen_1',
+        src: extensionGetURL('./public/assets/eileen_1.png'),
         style: {
           position: 'absolute',
           width: 320,
@@ -230,7 +249,8 @@ export const ThemeConfig = {
         },
       },
       {
-        src: extensionGetURL('./public/assets/eileen_bella.png'),
+        key: 'eileen_2',
+        src: extensionGetURL('./public/assets/eileen_2.png'),
         style: {
           position: 'absolute',
           width: 350,
@@ -273,6 +293,31 @@ export function matchThemeKey(text?: string) {
   } else return getRandom(RegList.map((item) => item.value));
 }
 
+export function matchThemeImgKey(text?: string, imgKeys?: string[]) {
+  if (text && imgKeys?.length) {
+    const filterRegs = RegList.filter((item) =>
+      imgKeys.some((str) => str.includes(item.value))
+    );
+    const list: string[] = [];
+    filterRegs.forEach((item) => item.reg.test(text) && list.push(item.value));
+    const themeKey = getRandom(
+      list.length ? list : filterRegs.map((item) => item.value)
+    );
+    const themeImgKey = getRandom(
+      imgKeys.filter((str) => str.includes(themeKey))
+    );
+    return [themeKey, themeImgKey];
+  } else return getRandom(RegList.map((item) => item.value));
+}
+
+export const pickTheme = (themeKey: string, themeImgKey?: string) => {
+  const obj = ThemeConfig[themeKey];
+  const QIcon = themeImgKey
+    ? obj.QIcon.find((item: any) => item.key === themeImgKey) ||
+      getRandom(obj.QIcon)
+    : getRandom(obj.QIcon);
+  return { ...obj, QIcon };
+};
 // export const themeColorMap = {
 //   ava: '#9ac8e2',
 //   bella: '#DB7D74',

@@ -1,13 +1,14 @@
 /* eslint-disable no-restricted-globals */
 import React, { useEffect, useMemo, useState } from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { ThemeConfig, matchThemeKey } from './config';
+import { render } from 'react-dom';
+import { matchThemeKey, matchThemeImgKey, pickTheme } from './config';
 import DownloadVideo from './DownloadVideo';
 import { getRandom, getUrlAllParams } from './utils/common';
+import { defaultThemeConfig } from '../../../../components/ConfigForm/ThemeForm';
 import './index.css';
 
 const InjectApp = () => {
-  const [themeKey, setThemeKey] = useState('ava');
+  const [theme, setTheme] = useState<any>();
   const [pageList, setPageList] = useState<any[]>([]);
   const [pNum, setPNum] = useState(0);
   const [stream, setStream] = useState<any>({});
@@ -15,14 +16,36 @@ const InjectApp = () => {
   const videoTitle = (document.getElementsByClassName('tit')?.[0] as any)
     ?.innerText;
 
+  const handleJudgeTheme = () => {
+    chrome.storage.sync.get(['themeConfig'], function (result) {
+      const { themeConfig = defaultThemeConfig } = result || {};
+      const { type, method, imgKeys } = themeConfig;
+      let temp;
+      if (type === 'auto' || !imgKeys?.length) {
+        const themeKey = matchThemeKey(videoTitle);
+        temp = pickTheme(themeKey);
+      } else {
+        if (method === 'match') {
+          const [themeKey, themeImgKey] = matchThemeImgKey(videoTitle, imgKeys);
+          temp = pickTheme(themeKey, themeImgKey);
+        } else {
+          const themeImgKey = getRandom(imgKeys);
+          const themeKey = themeImgKey.split('_')[0];
+          temp = pickTheme(themeKey, themeImgKey);
+        }
+      }
+      setTheme(temp);
+    });
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (pageUrl !== location.href) setPageUrl(location.href);
     }, 500);
 
+    handleJudgeTheme();
     setStream({});
     handle();
-    setThemeKey(matchThemeKey(videoTitle));
 
     return () => clearInterval(timer);
   }, [pageUrl]);
@@ -82,10 +105,7 @@ const InjectApp = () => {
           videoTitle={videoTitle}
           streamUrl={stream.durl[0].url}
           duration={stream.timelength}
-          theme={{
-            ...(ThemeConfig[themeKey] || {}),
-            QIcon: getRandom(ThemeConfig[themeKey].QIcon),
-          }}
+          theme={theme || pickTheme('ava')}
         />
       ) : null}
     </div>
