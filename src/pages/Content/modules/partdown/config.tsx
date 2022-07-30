@@ -77,6 +77,36 @@ export const ThemeConfig = {
           right: -25,
         },
       },
+      {
+        src: extensionGetURL('./public/assets/ava_1.png'),
+        style: {
+          position: 'absolute',
+          width: 170,
+          bottom: -25,
+          right: 25,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/ava_2.png'),
+        style: {
+          position: 'absolute',
+          zIndex: 5,
+          width: 250,
+          bottom: -20,
+          right: 25,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/ava_3.png'),
+        style: {
+          position: 'absolute',
+          width: 420,
+          bottom: -4,
+          right: -40,
+          clipPath:
+            'polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% 98.5%, 29% 98.5%, 22% 100%, 0 100%)',
+        },
+      },
     ],
   },
   bella: {
@@ -101,6 +131,85 @@ export const ThemeConfig = {
           width: 250,
           bottom: -20,
           right: 0,
+        },
+      },
+    ],
+  },
+  carol: {
+    key: 'carol',
+    primaryColor: '#8d81da',
+    SecondaryColor: '#B8A6D9',
+    fanIcon: extensionGetURL('./public/assets/knight.png'),
+    QIcon: [
+      {
+        src: extensionGetURL('./public/assets/carol_1.png'),
+        style: {
+          position: 'absolute',
+          width: 225,
+          bottom: -15,
+          right: 15,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/carol_2.png'),
+        style: {
+          position: 'absolute',
+          width: 220,
+          bottom: 0,
+          right: 20,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/carol_3.png'),
+        style: {
+          position: 'absolute',
+          width: 215,
+          bottom: 0,
+          right: 0,
+        },
+      },
+    ],
+  },
+  diana: {
+    key: 'diana',
+    primaryColor: '#E799B0',
+    SecondaryColor: '#e4bbc7',
+    fanIcon: extensionGetURL('./public/assets/jiaxintang.png'),
+    QIcon: [
+      {
+        src: extensionGetURL('./public/assets/diana_1.png'),
+        style: {
+          position: 'absolute',
+          width: 225,
+          bottom: -15,
+          right: 30,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/diana_2.png'),
+        style: {
+          position: 'absolute',
+          width: 240,
+          bottom: -15,
+          right: 0,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/diana_3.gif'),
+        style: {
+          position: 'absolute',
+          width: 250,
+          bottom: -20,
+          right: -12,
+        },
+      },
+      {
+        src: extensionGetURL('./public/assets/diana_4.png'),
+        style: {
+          position: 'absolute',
+          width: 185,
+          bottom: -15,
+          right: 25,
         },
       },
     ],
@@ -141,6 +250,14 @@ const RegList = [
   {
     reg: /贝\s*拉|拉姐|贝极星/,
     value: 'bella',
+  },
+  {
+    reg: /珈\s*乐|乐乐|黄嘉祺|皇家骑士/,
+    value: 'carol',
+  },
+  {
+    reg: /嘉\s*然|然宝|然然|嘉心糖/,
+    value: 'diana',
   },
   {
     reg: /乃\s*琳|乃宝|([乃奶]淇琳)/,

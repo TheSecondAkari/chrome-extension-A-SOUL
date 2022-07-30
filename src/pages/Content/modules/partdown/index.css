@@ -106,6 +106,72 @@
   color: #f3a29a;
 }
 
+/* 珈乐主题 */
+.carol-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #8d81da !important;
+}
+
+.carol-button {
+  background: #8d81da !important;
+}
+
+.carol-button:hover,
+.carol-button:active {
+  background: #B8A6D9 !important;
+}
+
+.carol-button.arco-btn-disabled {
+  background: #cac2fe !important;
+}
+
+.carol-button.arco-btn-disabled:hover,
+.carol-button.arco-btn-disabled:active {
+  background: #cac2fe !important;
+}
+
+.carol-text-button {
+  color: #8d81da;
+  cursor: pointer;
+}
+
+.carol-text-button:hover,
+.carol-text-button:active {
+  color: #B8A6D9;
+}
+
+/* 嘉然主题 */
+.diana-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #E799B0 !important;
+}
+
+.diana-button {
+  background: #E799B0 !important;
+}
+
+.diana-button:hover,
+.diana-button:active {
+  background: #e4bbc7 !important;
+}
+
+.diana-button.arco-btn-disabled {
+  background: #d5b2bc !important;
+}
+
+.diana-button.arco-btn-disabled:hover,
+.diana-button.arco-btn-disabled:active {
+  background: #d5b2bc !important;
+}
+
+.diana-text-button {
+  color: #E799B0;
+  cursor: pointer;
+}
+
+.diana-text-button:hover,
+.diana-text-button:active {
+  color: #e4bbc7;
+}
+
 /* 乃琳主题 */
 .eileen-checkbox.arco-checkbox-checked .arco-checkbox-mask {
   background: #576690 !important;
