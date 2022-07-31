@@ -128,7 +128,7 @@ const ThemeForm = (props: { type: 'popup' | 'options' }) => {
                                   content={
                                     <Image
                                       preview={false}
-                                      width={200}
+                                      height={160}
                                       src={i.src}
                                       alt={i.value}
                                     />
@@ -175,7 +175,7 @@ const ThemeForm = (props: { type: 'popup' | 'options' }) => {
                                       <Typography.Text type="secondary">
                                         <Image
                                           preview={false}
-                                          width={200}
+                                          height={200}
                                           src={i.src}
                                           alt={i.value}
                                         />

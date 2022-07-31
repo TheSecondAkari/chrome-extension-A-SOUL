@@ -260,28 +260,52 @@ export const ThemeConfig = {
       },
     ],
   },
+  all: {
+    key: 'all',
+    label: '一起',
+    primaryColor: '#cc983b',
+    SecondaryColor: '#e4ac4d',
+    fanIcon: extensionGetURL('./public/assets/yigehun.png'),
+    QIcon: [
+      {
+        key: 'all_1',
+        src: extensionGetURL('./public/assets/all_1.png'),
+        style: {
+          position: 'absolute',
+          zIndex: 5,
+          width: 350,
+          bottom: -20,
+          right: 0,
+        },
+      },
+    ],
+  },
 };
 
 const RegList = [
   {
-    reg: /向\s*晚|晚晚|顶晚人/,
+    reg: /向\s*晚|ava|晚晚|顶晚人/i,
     value: 'ava',
   },
   {
-    reg: /贝\s*拉|拉姐|贝极星/,
+    reg: /贝\s*拉|bella|拉姐|贝极星/i,
     value: 'bella',
   },
   {
-    reg: /珈\s*乐|乐乐|黄嘉祺|皇家骑士/,
+    reg: /珈\s*乐|carol|乐乐|黄嘉祺|皇家骑士/i,
     value: 'carol',
   },
   {
-    reg: /嘉\s*然|然宝|然然|嘉心糖/,
+    reg: /嘉\s*然|diana|然宝|然然|嘉心糖/i,
     value: 'diana',
   },
   {
-    reg: /乃\s*琳|乃宝|([乃奶]淇琳)/,
+    reg: /乃\s*琳|eileen|乃宝|([乃奶]淇琳)/i,
     value: 'eileen',
+  },
+  {
+    reg: /A-?SOUL|一个魂/i,
+    value: 'all',
   },
 ];
 

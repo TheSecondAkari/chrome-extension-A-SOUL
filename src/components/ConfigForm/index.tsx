@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Tooltip, Message, Switch, Grid } from '@arco-design/web-react';
-import { IconQuestionCircle } from '@arco-design/web-react/icon';
+import { IconEye, IconQuestionCircle } from '@arco-design/web-react/icon';
 import { getAsoulImgsNum } from '../../utils';
 import ThemeForm from './ThemeForm';
 import './index.css';
@@ -107,6 +107,22 @@ const ConfigForm = (props: { type: 'popup' | 'options' }) => {
 
       <Row style={{ marginTop: 16 }}>
         <Col {...labelColProps}>插件主题配置</Col>
+        {type === 'popup' ? (
+          <span
+            style={{
+              cursor: 'pointer',
+              color: '#3491FA',
+            }}
+            onClick={() => {
+              chrome.tabs.create({
+                url: chrome.runtime.getURL('./options.html'),
+              });
+            }}
+          >
+            便捷预览配置
+            <IconEye />
+          </span>
+        ) : null}
       </Row>
 
       <div style={{ marginTop: 16 }}>

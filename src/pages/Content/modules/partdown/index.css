@@ -204,3 +204,36 @@
 .eileen-text-button:active {
   color: #7687b7;
 }
+
+/* 一起主题 */
+.all-checkbox.arco-checkbox-checked .arco-checkbox-mask {
+  background: #cc983b !important;
+}
+
+.all-button {
+  background: #cc983b !important;
+}
+
+.all-button:hover,
+.all-button:active {
+  background: #e4ac4d !important;
+}
+
+.all-button.arco-btn-disabled {
+  background: #f9d490 !important;
+}
+
+.all-button.arco-btn-disabled:hover,
+.all-button.arco-btn-disabled:active {
+  background: #f9d490 !important;
+}
+
+.all-text-button {
+  color: #cc983b;
+  cursor: pointer;
+}
+
+.all-text-button:hover,
+.all-text-button:active {
+  color: #e4ac4d;
+}
